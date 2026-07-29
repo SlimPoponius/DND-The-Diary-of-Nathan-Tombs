@@ -301,6 +301,26 @@
     padding-bottom: 12px;
     margin-bottom: 8px;
   }
+  .view-toggle {
+    display: inline-flex;
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .view-btn {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
+    padding: 7px 15px;
+    border: none;
+    background: var(--surface);
+    color: var(--text-faint);
+    cursor: pointer;
+  }
+  .view-btn + .view-btn { border-left: 1px solid var(--rule); }
+  .view-btn:hover { color: var(--text-dim); }
+  .view-btn.active { background: var(--verdigris-dim); color: var(--text); }
   .search-wrap {
     flex: 1;
     display: flex;
@@ -346,6 +366,16 @@
     font-size: 1.05rem;
   }
   .no-results.show { display: block; }
+
+  #sessions .summary-text { display: none; }
+  #sessions.mode-summary .summary-text {
+    display: block;
+    margin: 0 0 4px;
+    font-size: 0.97rem;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  #sessions.mode-summary .content > ul { display: none; }
 
   /* ---------- Session entries ---------- */
   .entry {
@@ -651,6 +681,11 @@
     </nav>
 
     <section class="tab-panel active" data-tab="log">
+    <div class="view-toggle" role="group" aria-label="Session detail level">
+      <button class="view-btn" data-view="summary">Summary</button>
+      <button class="view-btn active" data-view="extended">Extended notes</button>
+    </div>
+
     <div class="toolbar">
       <div class="search-wrap">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
@@ -667,7 +702,9 @@
 
       <details class="entry" data-idx="1">
         <summary><span class="idx">01</span><h3>We Wake Up Kidnapped</h3><span class="caret">&#9656;</span></summary>
-        <div class="content"><ul>
+        <div class="content">
+        <p class="summary-text">Kidnapped and knocked out by goons, the party wakes in a cave and treks through the dungeon together, sizing each other up as a ragtag crew all heading toward the city.</p>
+        <ul>
           <li>We start in a cave after being kidnapped</li>
           <li>Knocked unconscious by goons, courtesy of these hands</li>
           <li>Traveled through the dungeon
@@ -687,7 +724,9 @@
 
       <details class="entry" data-idx="2">
         <summary><span class="idx">02</span><h3>The Gnome Colony</h3><span class="caret">&#9656;</span></summary>
-        <div class="content"><ul>
+        <div class="content">
+        <p class="summary-text">The party navigates a gnome civil war between red and blue colonies, declines to get involved, beats "Gnome Tyson," picks up new member Moss, and sneaks into Heaven's Reach.</p>
+        <ul>
           <li>Discover a gnome colony (red and blue)
             <ul>
               <li>Red gnomes are partners; blue gnomes are militaristic</li>
@@ -713,7 +752,9 @@
 
       <details class="entry" data-idx="3">
         <summary><span class="idx">03</span><h3>Riddles Above Our Station</h3><span class="caret">&#9656;</span></summary>
-        <div class="content"><ul>
+        <div class="content">
+        <p class="summary-text">With Lord Baskerville missing and his heirs feuding, the broke party joins the adventurers' guild, takes a pest-control job, and barely survives an old man's ambush and an eldritch panther.</p>
+        <ul>
           <li>Lord Baskerville missing
             <ul>
               <li>War brewing between his 3 children
@@ -736,7 +777,9 @@
 
       <details class="entry" data-idx="4">
         <summary><span class="idx">04</span><h3>The Water-Logged Town <span class="badge">Filler</span></h3><span class="caret">&#9656;</span></summary>
-        <div class="content"><ul>
+        <div class="content">
+        <p class="summary-text">Sent to investigate a water-logged town, the party uncovers Dr. Tombs' book, fights zombies, and exposes their host Wendell as the villain behind it all &mdash; with a Wendigo fight looming.</p>
+        <ul>
           <li>Returned from the quest</li>
           <li>Got 5 gold</li>
           <li>New quest: check out a water-logged town, as no one has been reporting in</li>
@@ -758,7 +801,9 @@
 
       <details class="entry" data-idx="5">
         <summary><span class="idx">05</span><h3>Testicular Torsion vs. Wendigo</h3><span class="caret">&#9656;</span></summary>
-        <div class="content"><ul>
+        <div class="content">
+        <p class="summary-text">The party kills the Wendigo (testicular torsion, no less), watches Wendell die to cyanide, gets conned out of their reward, and strikes a wary deal with Princess Lysandra Baskerville for access to the first gem.</p>
+        <ul>
           <li>Fought the Wendigo</li>
           <li>Killed the Wendigo with testicular torsion</li>
           <li>Dr. Wendell died to cyanide</li>
@@ -776,7 +821,9 @@
 
       <details class="entry" data-idx="6">
         <summary><span class="idx">06</span><h3>The Statue Trial &amp; the First Gem</h3><span class="caret">&#9656;</span></summary>
-        <div class="content"><ul>
+        <div class="content">
+        <p class="summary-text">The party braves the statue's trial &mdash; mirrors, a broken bridge, and a living statue &mdash; and wins the first gauntlet gem, leveling up as a beam signals the next clue.</p>
+        <ul>
           <li>Left the princess</li>
           <li>Grabbed Asakura from his apartment</li>
           <li>Went on a path to the blacksmith</li>
@@ -818,7 +865,9 @@
 
       <details class="entry" data-idx="7">
         <summary><span class="idx">07</span><h3>The Curse, the Amulet, the Librarian</h3><span class="caret">&#9656;</span></summary>
-        <div class="content"><ul>
+        <div class="content">
+        <p class="summary-text">Asakura gets the Umbral Gauntlets and a curse from Dr. Tombs; the party survives a cult-flooded city, cautiously loops in the princess, and learns from the wizard librarian that Dr. Tombs is hunting a dead god.</p>
+        <ul>
           <li>Escaped the dungeon; everyone now hunting for where the light beamed outward</li>
           <li>Went back to the blacksmith
             <ul>
@@ -854,7 +903,9 @@
 
       <details class="entry" data-idx="8">
         <summary><span class="idx">08</span><h3>Goblin Disguises &amp; a Gemstone Bank</h3><span class="caret">&#9656;</span></summary>
-        <div class="content"><ul>
+        <div class="content">
+        <p class="summary-text">The party disguises as goblins to infiltrate a gem-based bank, rescues a witch named Agatha, robs some corrupt guards, and stumbles onto a shipment guarded by catfish people.</p>
+        <ul>
           <li>Turns out the death knight is an aarakocra belonging to the guy in the cloak</li>
           <li>The guy wants to know how we found the next clue</li>
           <li>Realized it was the princess' brother, who runs the Guild</li>
@@ -895,7 +946,9 @@
 
       <details class="entry" data-idx="9">
         <summary><span class="idx">09</span><h3>The Old Man with a Pipe</h3><span class="caret">&#9656;</span></summary>
-        <div class="content"><ul>
+        <div class="content">
+        <p class="summary-text">After beating the catfish captors and reconnecting with the returning Surina, the party heads for the Thieves' Guild and meets a mysterious old man with a pipe.</p>
+        <ul>
           <li>Fought the catfish people
             <ul>
               <li>Nathan and Moss fought over copper</li>
@@ -919,7 +972,9 @@
 
       <details class="entry" data-idx="10">
         <summary><span class="idx">10</span><h3>Greatest Desires &amp; Nathan's Backstory</h3><span class="caret">&#9656;</span></summary>
-        <div class="content"><ul>
+        <div class="content">
+        <p class="summary-text">The pipe man grants each character a boon tied to a personal question, revealing (via Moss's dream) a piece of Nathan's traumatic backstory, before the party treks through a sewer to a hidden village.</p>
+        <ul>
           <li>Re-interact with the old pipe man, who asks about our greatest desires
             <ul>
               <li>Asakura got his turtle (asked about his turtle)</li>
@@ -948,7 +1003,9 @@
 
       <details class="entry" data-idx="11">
         <summary><span class="idx">11</span><h3>The White Mask Cult</h3><span class="caret">&#9656;</span></summary>
-        <div class="content"><ul>
+        <div class="content">
+        <p class="summary-text">While chasing a gauntlet upgrade, Nathan uncovers the White Mask Cult; the party infiltrates their bar in disguise, gets handed cult "missions," and is ambushed by frog assassins.</p>
+        <ul>
           <li>Moss subbed in for the bear person's date</li>
           <li>Surina and team visit an auction and get a fish</li>
           <li>Nathan, unamused, heads to the blacksmith
@@ -1006,7 +1063,9 @@
 
       <details class="entry" data-idx="12">
         <summary><span class="idx">12</span><h3>The Toad King's Court</h3><span class="caret">&#9656;</span></summary>
-        <div class="content"><ul>
+        <div class="content">
+        <p class="summary-text">The frog assassins haul the party before the Toad King, where a fake Asakura (a doppelganger) nearly gets away with it before escaping, and Nathan secures the warehouse key with Pepe's help.</p>
+        <ul>
           <li>Interrupted by 3 frog assassins: Richard, Pepe, and one other frog</li>
           <li>The frogs are only after Asakura, for leading the group to the cult hideout</li>
           <li>Team tries talking (and magic tricks, courtesy of Nathan) to get to the leader for the keys</li>
@@ -1033,7 +1092,9 @@
 
       <details class="entry" data-idx="13">
         <summary><span class="idx">13</span><h3>Cursed Gloves &amp; a Labubu</h3><span class="caret">&#9656;</span></summary>
-        <div class="content"><ul>
+        <div class="content">
+        <p class="summary-text">Back in the city, Nathan joins the Thieves' Guild to recover his stolen gauntlets, dons cursed strength-for-intelligence gloves, and cracks open a vault &mdash; right as the guild starts rumbling.</p>
+        <ul>
           <li>Group decides to return to the city</li>
           <li>Nathan goes to recover the keys
             <ul>
@@ -1070,7 +1131,9 @@
 
       <details class="entry" data-idx="13a">
         <summary><span class="idx">13a</span><h3>The Monster Truck Derby <span class="badge">Filler</span></h3><span class="caret">&#9656;</span></summary>
-        <div class="content"><ul>
+        <div class="content">
+        <p class="summary-text">The party helps a Leonin overthrow a hair-stealing tyrant by infiltrating and winning a monster truck derby, taking down the armored Governor Mr. 305.</p>
+        <ul>
           <li>Sometime between the last session and a future endeavor, given a quest by Princess Lysandra to help a Leonin whose kingdom is ruled by a tyrant</li>
           <li>Met at a fae cafe</li>
           <li>The Leonin explains: the king who governs the sky kingdom is making everyone go bald, and he needs help overthrowing him
@@ -1111,7 +1174,9 @@
 
       <details class="entry" data-idx="14">
         <summary><span class="idx">14</span><h3>The Wood Dragon</h3><span class="caret">&#9656;</span></summary>
-        <div class="content"><ul>
+        <div class="content">
+        <p class="summary-text">A wood dragon hunting the forest's heart drags the party into a zombie-tree brawl alongside new arrival Gorax, ending with Surina hurling the heart into the dragon and the group being swept into the second dungeon.</p>
+        <ul>
           <li>Preface: I wasn't available, so my character Nathan was trapped inside a Labubu</li>
           <li>Main synopsis: the rumbling turned out to be a wood dragon searching for the heart of the forest, which was in the Thieves' Guild. The team opened doors and fought off wood zombie creatures sent to distract the dragon.</li>
           <li>They also meet Gorax the Destroyer, who has a deep hatred for trees and demolishes a ton of tree zombies</li>
@@ -1124,7 +1189,9 @@
 
       <details class="entry" data-idx="15">
         <summary><span class="idx">15</span><h3>The Trial of Perseverance</h3><span class="caret">&#9656;</span></summary>
-        <div class="content"><ul>
+        <div class="content">
+        <p class="summary-text">Freed from the Labubu but down two teammates, Nathan fights through spider-infested caves, joins a druid war party undercover, and learns the druids and elves are locked in a 50-year game for the forest's fate.</p>
+        <ul>
           <li>Entering the dungeon, Nathan was freed, but Moss and Alera were sent into the Labubu</li>
           <li>Three paths available
             <ul>
@@ -1151,7 +1218,9 @@
 
       <details class="entry" data-idx="16">
         <summary><span class="idx">16</span><h3>The Fifty-Year Game</h3><span class="caret">&#9656;</span></summary>
-        <div class="content"><ul>
+        <div class="content">
+        <p class="summary-text">As Nathan plays "jungler" in the druid-vs-elf tournament, the rest of the party causes chaos chasing the second gem &mdash; and Nathan uncovers a gnome plot to make both sides destroy each other.</p>
+        <ul>
           <li>The chief sets the lineup for the game (he can't play, having played last round &mdash; it's run like a League of Legends tourney)</li>
           <li>Lineup: Nathan, the chief's brother, 2 more druids, and a gnome who benched the chief last round</li>
           <li>Nathan is, essentially, the jungler</li>
@@ -1689,6 +1758,20 @@
       var target = btn.getAttribute('data-tab');
       tabBtns.forEach(function(b){ b.classList.toggle('active', b === btn); });
       tabPanels.forEach(function(p){ p.classList.toggle('active', p.getAttribute('data-tab') === target); });
+    });
+  });
+
+  // ---------- Summary / Extended view toggle ----------
+  var viewBtns = Array.prototype.slice.call(document.querySelectorAll('.view-btn'));
+  var sessionsEl = document.getElementById('sessions');
+  viewBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var mode = btn.getAttribute('data-view');
+      viewBtns.forEach(function(b){ b.classList.toggle('active', b === btn); });
+      sessionsEl.classList.toggle('mode-summary', mode === 'summary');
+      if (mode === 'summary') {
+        entries.forEach(function(e){ e.open = true; priorOpenState.set(e, true); });
+      }
     });
   });
 })();
