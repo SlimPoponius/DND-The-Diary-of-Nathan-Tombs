@@ -1,0 +1,1687 @@
+<title>These Hands: A Campaign Ledger</title>
+<style>
+  :root {
+    --bg: #14110d;
+    --surface: #1d1812;
+    --surface-raised: #241d15;
+    --rule: #3a3226;
+    --rule-soft: #2a241b;
+    --text: #ece3d2;
+    --text-dim: #b5a891;
+    --text-faint: #7d715c;
+    --brass: #d1a52e;
+    --brass-dim: #8f7527;
+    --verdigris: #6ea08c;
+    --verdigris-dim: #3f5c50;
+    --brick: #c1543d;
+    --brick-dim: #6b2f22;
+    --focus: #e8c85a;
+
+    --serif: ui-serif, Georgia, "Iowan Old Style", "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, "Cascadia Mono", "SF Mono", Consolas, "Liberation Mono", monospace;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #e6dfc9;
+      --surface: #f1ebd8;
+      --surface-raised: #f8f3e4;
+      --rule: #cdc2a0;
+      --rule-soft: #ddd3b5;
+      --text: #211b13;
+      --text-dim: #4d4432;
+      --text-faint: #857a5f;
+      --brass: #8a6a16;
+      --brass-dim: #b89639;
+      --verdigris: #3f6b57;
+      --verdigris-dim: #7fa694;
+      --brick: #a3402c;
+      --brick-dim: #d98d78;
+      --focus: #7a5c10;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14110d;
+    --surface: #1d1812;
+    --surface-raised: #241d15;
+    --rule: #3a3226;
+    --rule-soft: #2a241b;
+    --text: #ece3d2;
+    --text-dim: #b5a891;
+    --text-faint: #7d715c;
+    --brass: #d1a52e;
+    --brass-dim: #8f7527;
+    --verdigris: #6ea08c;
+    --verdigris-dim: #3f5c50;
+    --brick: #c1543d;
+    --brick-dim: #6b2f22;
+    --focus: #e8c85a;
+  }
+  :root[data-theme="light"] {
+    --bg: #e6dfc9;
+    --surface: #f1ebd8;
+    --surface-raised: #f8f3e4;
+    --rule: #cdc2a0;
+    --rule-soft: #ddd3b5;
+    --text: #211b13;
+    --text-dim: #4d4432;
+    --text-faint: #857a5f;
+    --brass: #8a6a16;
+    --brass-dim: #b89639;
+    --verdigris: #3f6b57;
+    --verdigris-dim: #7fa694;
+    --brick: #a3402c;
+    --brick-dim: #d98d78;
+    --focus: #7a5c10;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    background-image:
+      radial-gradient(ellipse 900px 500px at 15% -10%, color-mix(in srgb, var(--brass) 7%, transparent), transparent),
+      radial-gradient(ellipse 700px 500px at 100% 20%, color-mix(in srgb, var(--verdigris) 6%, transparent), transparent);
+  }
+
+  a { color: var(--brass); }
+
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: clamp(20px, 4vw, 56px);
+    display: grid;
+    grid-template-columns: minmax(240px, 300px) 1fr;
+    gap: clamp(24px, 4vw, 48px);
+    align-items: start;
+  }
+
+  /* ---------- Masthead ---------- */
+  .masthead {
+    grid-column: 1 / -1;
+    border-bottom: 3px double var(--rule);
+    padding-bottom: 22px;
+    margin-bottom: 4px;
+  }
+  .masthead .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--verdigris);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .masthead .eyebrow::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+  .masthead h1 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(2.1rem, 5vw, 3.4rem);
+    letter-spacing: -0.01em;
+    margin: 8px 0 6px;
+    text-wrap: balance;
+    line-height: 1.05;
+  }
+  .masthead h1 em {
+    font-style: italic;
+    color: var(--brass);
+  }
+  .masthead .dek {
+    font-size: 1.02rem;
+    color: var(--text-dim);
+    max-width: 62ch;
+    line-height: 1.55;
+  }
+  .masthead .roster {
+    margin-top: 14px;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    letter-spacing: 0.02em;
+  }
+  .masthead .roster b { color: var(--text-dim); font-weight: 600; }
+
+  /* ---------- Left rail ---------- */
+  .rail {
+    position: sticky;
+    top: clamp(16px, 3vw, 32px);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+  }
+  .panel-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 12px 16px 10px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .panel-head h2 {
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+  .panel-head .reset-btn {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--text-faint);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    padding: 2px;
+  }
+  .panel-head .reset-btn:hover { color: var(--brick); }
+
+  .tally-list { list-style: none; margin: 0; padding: 6px 8px 10px; }
+  .tally-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 8px;
+    border-radius: 3px;
+  }
+  .tally-row:hover { background: var(--surface-raised); }
+  .tally-name {
+    font-size: 0.92rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tally-name .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--brick);
+    flex-shrink: 0;
+  }
+  .tally-count {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 1.05rem;
+    min-width: 2.4ch;
+    text-align: right;
+    color: var(--brick);
+  }
+  .stepper {
+    display: flex;
+    gap: 2px;
+  }
+  .stepper button {
+    width: 22px; height: 22px;
+    border: 1px solid var(--rule);
+    background: var(--surface-raised);
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+  .stepper button:hover { border-color: var(--brass); color: var(--brass); }
+  .stepper button:active { transform: translateY(1px); }
+
+  .tally-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 16px 14px;
+    border-top: 1px dashed var(--rule);
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .tally-total span:last-child {
+    color: var(--verdigris);
+    font-size: 0.95rem;
+    font-family: var(--mono);
+  }
+
+  .chip-panel-body { padding: 12px 14px 14px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.02em;
+    padding: 5px 10px;
+    border: 1px solid var(--rule);
+    background: var(--surface-raised);
+    color: var(--text-dim);
+    border-radius: 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .chip:hover { border-color: var(--verdigris); }
+  .chip.active {
+    background: var(--verdigris-dim);
+    border-color: var(--verdigris);
+    color: var(--text);
+  }
+  .chip:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .rail-note {
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    padding: 2px 4px;
+    line-height: 1.5;
+  }
+  .rail-note b { color: var(--verdigris); }
+
+  /* ---------- Log column ---------- */
+  .log-col { min-width: 0; }
+
+  .toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: var(--bg);
+    padding-bottom: 12px;
+    margin-bottom: 8px;
+  }
+  .search-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--rule);
+    background: var(--surface);
+    border-radius: 3px;
+    padding: 9px 12px;
+  }
+  .search-wrap svg { flex-shrink: 0; opacity: 0.5; }
+  .search-wrap input {
+    flex: 1;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 0.88rem;
+    outline: none;
+  }
+  .search-wrap input::placeholder { color: var(--text-faint); }
+  .toolbar-btn {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    padding: 9px 12px;
+    border: 1px solid var(--rule);
+    background: var(--surface);
+    color: var(--text-dim);
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .toolbar-btn:hover { border-color: var(--brass); color: var(--brass); }
+
+  .no-results {
+    display: none;
+    padding: 30px 12px;
+    text-align: center;
+    color: var(--text-faint);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.05rem;
+  }
+  .no-results.show { display: block; }
+
+  /* ---------- Session entries ---------- */
+  .entry {
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .entry.hide { display: none; }
+  .entry summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 16px 4px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 14px;
+    align-items: baseline;
+  }
+  .entry summary::-webkit-details-marker { display: none; }
+  .entry .idx {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    padding-top: 3px;
+    min-width: 3ch;
+  }
+  .entry summary h3 {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 1.28rem;
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+  .badge {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 20px;
+    border: 1px solid var(--brass-dim);
+    color: var(--brass);
+    background: color-mix(in srgb, var(--brass) 10%, transparent);
+    white-space: nowrap;
+  }
+  .entry summary h3 .badge {
+    vertical-align: middle;
+    margin-left: 10px;
+  }
+  .entry summary .caret {
+    font-family: var(--mono);
+    color: var(--text-faint);
+    transition: transform 0.15s ease;
+    padding-top: 5px;
+  }
+  .entry[open] summary .caret { transform: rotate(90deg); color: var(--brass); }
+
+  .entry .content {
+    padding: 0 4px 22px calc(3ch + 14px);
+  }
+  .entry ul {
+    margin: 0;
+    padding-left: 1.2em;
+  }
+  .entry .content > ul { padding-left: 0; }
+  .entry li {
+    margin: 7px 0;
+    line-height: 1.55;
+    font-size: 0.97rem;
+    color: var(--text);
+  }
+  .entry li::marker {
+    color: var(--verdigris);
+  }
+  .entry ul ul {
+    margin-top: 6px;
+    padding-left: 1.3em;
+  }
+  .entry ul ul li {
+    font-size: 0.93rem;
+    color: var(--text-dim);
+  }
+  .entry ul ul ul li {
+    font-size: 0.9rem;
+    color: var(--text-faint);
+  }
+  mark {
+    background: color-mix(in srgb, var(--brass) 35%, transparent);
+    color: var(--text);
+    border-radius: 2px;
+    padding: 0 1px;
+  }
+
+  /* ---------- Section tabs ---------- */
+  .tabbar {
+    position: sticky;
+    top: clamp(16px, 3vw, 32px);
+    z-index: 6;
+    display: flex;
+    gap: 4px;
+    background: var(--bg);
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .tab-btn {
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.03em;
+    padding: 9px 14px 11px;
+    border: none;
+    background: none;
+    color: var(--text-faint);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -11px;
+  }
+  .tab-btn:hover { color: var(--text-dim); }
+  .tab-btn.active { color: var(--brass); border-bottom-color: var(--brass); }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .section-intro {
+    font-size: 0.92rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+    max-width: 62ch;
+    margin: 4px 0 20px;
+  }
+
+  /* ---------- Character bios ---------- */
+  .bio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 14px;
+    padding-bottom: 8px;
+  }
+  .bio-card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 16px 18px 18px;
+  }
+  .bio-card .bio-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 2px;
+  }
+  .bio-card h3 {
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  .bio-card .bio-count {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.74rem;
+    color: var(--brick);
+    white-space: nowrap;
+  }
+  .bio-card .bio-alias {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.86rem;
+    color: var(--brass);
+    margin: 0 0 10px;
+  }
+  .bio-card ul { margin: 0; padding-left: 1.1em; }
+  .bio-card li {
+    font-size: 0.89rem;
+    line-height: 1.55;
+    color: var(--text-dim);
+    margin: 6px 0;
+  }
+  .bio-card li::marker { color: var(--verdigris); }
+
+  .bio-divider {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 30px 0 4px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule-soft);
+  }
+
+  /* ---------- Role badges (side characters) ---------- */
+  .badge.role-ally {
+    border-color: var(--verdigris-dim);
+    color: var(--verdigris);
+    background: color-mix(in srgb, var(--verdigris) 12%, transparent);
+  }
+  .badge.role-antagonist {
+    border-color: var(--brick-dim);
+    color: var(--brick);
+    background: color-mix(in srgb, var(--brick) 14%, transparent);
+  }
+  .badge.role-wildcard {
+    border-color: var(--brass-dim);
+    color: var(--brass);
+    background: color-mix(in srgb, var(--brass) 10%, transparent);
+  }
+  .badge.role-neutral {
+    border-color: var(--rule);
+    color: var(--text-faint);
+    background: var(--surface-raised);
+  }
+
+  /* ---------- Status badges (mysteries) ---------- */
+  .badge.status-unresolved {
+    border-color: var(--brick-dim);
+    color: var(--brick);
+    background: color-mix(in srgb, var(--brick) 14%, transparent);
+  }
+  .badge.status-progress {
+    border-color: var(--brass-dim);
+    color: var(--brass);
+    background: color-mix(in srgb, var(--brass) 10%, transparent);
+  }
+  .badge.status-simmer {
+    border-color: var(--verdigris-dim);
+    color: var(--verdigris);
+    background: color-mix(in srgb, var(--verdigris) 14%, transparent);
+  }
+
+  /* ---------- Watch list ---------- */
+  .watch-list { list-style: none; margin: 0; padding: 0; }
+  .watch-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    align-items: baseline;
+    padding: 14px 4px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .watch-item .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--brass);
+    margin-top: 6px;
+  }
+  .watch-item p {
+    margin: 0;
+    font-size: 0.93rem;
+    line-height: 1.55;
+    color: var(--text);
+  }
+  .watch-item .tag {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--text-faint);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 820px) {
+    .page { grid-template-columns: 1fr; }
+    .rail { position: static; }
+    .tabbar { position: static; }
+    .entry .content { padding-left: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="eyebrow">Campaign Ledger &middot; Heaven's Reach &amp; the Gauntlet of Gems</div>
+    <h1>These Hands: <em>A Campaign Log</em></h1>
+    <p class="dek">A running record of the party's descent from a kidnapper's cave to the gnome-run tourney grounds of the second dungeon &mdash; gnome wars, cursed gauntlets, a Labubu, and one testicular-torsion kill shot. Nathan narrates; the rest of the table just tries to keep up.</p>
+    <p class="roster"><b>Party:</b> Nathan (these hands) &middot; Asakura / Marty Supreme &middot; Moss &middot; Bingus &middot; Alera &middot; Surina &middot; Gorax the Destroyer</p>
+  </header>
+
+  <aside class="rail">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Kill Count</h2>
+        <button class="reset-btn" id="resetTally">reset</button>
+      </div>
+      <ul class="tally-list" id="tallyList"></ul>
+      <div class="tally-total">
+        <span>Party total</span>
+        <span id="tallyTotal">0</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h2>Filter by name</h2></div>
+      <div class="chip-panel-body" id="chipPanel"></div>
+    </div>
+
+    <p class="rail-note">Search or tap a name to jump to every session that mentions them &mdash; matches auto-expand. <b>Kill counts save to this browser.</b></p>
+  </aside>
+
+  <main class="log-col">
+    <nav class="tabbar" id="tabbar">
+      <button class="tab-btn active" data-tab="log">Session Log</button>
+      <button class="tab-btn" data-tab="bios">Character Bios</button>
+      <button class="tab-btn" data-tab="mysteries">Mysteries</button>
+      <button class="tab-btn" data-tab="watch">Watch List</button>
+    </nav>
+
+    <section class="tab-panel active" data-tab="log">
+    <div class="toolbar">
+      <div class="search-wrap">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="searchInput" type="text" placeholder="Search the ledger&hellip; (gnomes, Wendigo, Labubu&hellip;)" autocomplete="off">
+      </div>
+      <button class="toolbar-btn" id="jumpLatest">Jump to latest</button>
+      <button class="toolbar-btn" id="expandAll">Expand all</button>
+      <button class="toolbar-btn" id="collapseAll">Collapse all</button>
+    </div>
+
+    <div class="no-results" id="noResults">No entries in the ledger match that search.</div>
+
+    <div id="sessions">
+
+      <details class="entry" data-idx="1">
+        <summary><span class="idx">01</span><h3>We Wake Up Kidnapped</h3><span class="caret">&#9656;</span></summary>
+        <div class="content"><ul>
+          <li>We start in a cave after being kidnapped</li>
+          <li>Knocked unconscious by goons, courtesy of these hands</li>
+          <li>Traveled through the dungeon
+            <ul>
+              <li>Saw PBJ the long way</li>
+              <li>Neck-checked a goon</li>
+              <li>Character finds the wizard a bit much</li>
+              <li>Will protect the short cleric with his life</li>
+              <li>Curious about the cleric being able to open a chest with hands</li>
+              <li>Golden lizard lady seems too serious, but she doesn't seem bad</li>
+              <li>Merfolk saved by these hands</li>
+              <li>Overall a ragtag group of individuals who all seem to be heading to the city</li>
+            </ul>
+          </li>
+        </ul></div>
+      </details>
+
+      <details class="entry" data-idx="2">
+        <summary><span class="idx">02</span><h3>The Gnome Colony</h3><span class="caret">&#9656;</span></summary>
+        <div class="content"><ul>
+          <li>Discover a gnome colony (red and blue)
+            <ul>
+              <li>Red gnomes are partners; blue gnomes are militaristic</li>
+              <li>Both sides hate each other for no reason</li>
+              <li>Shrubbery bush competition where red wins every year</li>
+              <li>If we'd helped one side, they would have rewarded us with something</li>
+              <li>Decided not to help the gnomes</li>
+              <li>Fought Gnome Tyson
+                <ul><li>Nearly lost, but won</li></ul>
+              </li>
+            </ul>
+          </li>
+          <li>Met new character Moss, who eats moss and is looking for "new experiences"</li>
+          <li>Made it to Heaven's Reach entrance
+            <ul>
+              <li>Guards weren't letting anyone in, so we decided to sneak in
+                <ul><li>Due to a high stealth check, I was able to sneak in</li></ul>
+              </li>
+            </ul>
+          </li>
+        </ul></div>
+      </details>
+
+      <details class="entry" data-idx="3">
+        <summary><span class="idx">03</span><h3>Riddles Above Our Station</h3><span class="caret">&#9656;</span></summary>
+        <div class="content"><ul>
+          <li>Lord Baskerville missing
+            <ul>
+              <li>War brewing between his 3 children
+                <ul><li>Eldest daughter and son are favorable; youngest son is an idiot</li></ul>
+              </li>
+              <li>No one is being told the riddle without reason
+                <ul><li>Have to be of high standing</li></ul>
+              </li>
+            </ul>
+          </li>
+          <li>Broke</li>
+          <li>Joined the adventurers' guild on a temp ID</li>
+          <li>Took on a quest to get rid of a pest</li>
+          <li>Met an old man</li>
+          <li>Old man tried to kill us</li>
+          <li>Killed an eldritch panther thing</li>
+          <li>Almost died</li>
+        </ul></div>
+      </details>
+
+      <details class="entry" data-idx="4">
+        <summary><span class="idx">04</span><h3>The Water-Logged Town <span class="badge">Filler</span></h3><span class="caret">&#9656;</span></summary>
+        <div class="content"><ul>
+          <li>Returned from the quest</li>
+          <li>Got 5 gold</li>
+          <li>New quest: check out a water-logged town, as no one has been reporting in</li>
+          <li>Went to the town</li>
+          <li>Villagers are creepy and acting weird</li>
+          <li>Met Wendell</li>
+          <li>Wendell is a bit suspicious</li>
+          <li>Went through the manor</li>
+          <li>Discovered claws and other randomness</li>
+          <li>Found the book by Dr. Tombs</li>
+          <li>Attacked by zombies</li>
+          <li>Easily killable</li>
+          <li>Solved riddles</li>
+          <li>Secret door in the study</li>
+          <li>Wendell is the bad guy</li>
+          <li>Fighting the Wendigo next session</li>
+        </ul></div>
+      </details>
+
+      <details class="entry" data-idx="5">
+        <summary><span class="idx">05</span><h3>Testicular Torsion vs. Wendigo</h3><span class="caret">&#9656;</span></summary>
+        <div class="content"><ul>
+          <li>Fought the Wendigo</li>
+          <li>Killed the Wendigo with testicular torsion</li>
+          <li>Dr. Wendell died to cyanide</li>
+          <li>Returned back</li>
+          <li>Got conned out of our money &mdash; no one believed the story of the Wendigo</li>
+          <li>Met Princess Lysandra Baskerville</li>
+          <li>Whole team is skeptical of the deal
+            <ul><li>May need to check the mage tower for info on Dr. Tombs</li></ul>
+          </li>
+          <li>Working with the princess to get access to the next gem</li>
+          <li>Next gem is located back at the statue where we got the nature-check boost</li>
+          <li>Plan: go to the statue to access the first gem dungeon</li>
+        </ul></div>
+      </details>
+
+      <details class="entry" data-idx="6">
+        <summary><span class="idx">06</span><h3>The Statue Trial &amp; the First Gem</h3><span class="caret">&#9656;</span></summary>
+        <div class="content"><ul>
+          <li>Left the princess</li>
+          <li>Grabbed Asakura from his apartment</li>
+          <li>Went on a path to the blacksmith</li>
+          <li>Found umbral iron</li>
+          <li>Dead smithy found with it</li>
+          <li>Made it to the actual smithy
+            <ul><li>He is making umbral fists for my character (came down to a vote)</li></ul>
+          </li>
+          <li>Ran into Team Aqua
+            <ul><li>Thought about jumping them, but did not, due to sheer numbers</li></ul>
+          </li>
+          <li>Made it back to the statue</li>
+          <li>Did a bow</li>
+          <li>Entered the trial</li>
+          <li>Room of mirrors
+            <ul>
+              <li>Asakura got snuck by himself</li>
+              <li>Everyone else dodged</li>
+            </ul>
+          </li>
+          <li>Room with a broken bridge
+            <ul><li>Moss bridged it from the bottom</li></ul>
+          </li>
+          <li>Room with a statue
+            <ul>
+              <li>Bow or kneel</li>
+              <li>Everyone bowed except Bingus</li>
+              <li>Statue started moving and began combat</li>
+              <li>A lot of whiffs</li>
+              <li>Moonbeam FTW</li>
+              <li>Nathan landed the final blow &mdash; got the first gem for the gauntlet</li>
+              <li>Ended with a beam sent outward, marking where a clue was</li>
+              <li>Must now escape</li>
+              <li>Levelled up</li>
+            </ul>
+          </li>
+        </ul></div>
+      </details>
+
+      <details class="entry" data-idx="7">
+        <summary><span class="idx">07</span><h3>The Curse, the Amulet, the Librarian</h3><span class="caret">&#9656;</span></summary>
+        <div class="content"><ul>
+          <li>Escaped the dungeon; everyone now hunting for where the light beamed outward</li>
+          <li>Went back to the blacksmith
+            <ul>
+              <li>Asakura got cursed, courtesy of Dr. Tombs</li>
+              <li>Said he'd be done with the weapon in a few days &mdash; then said it already was</li>
+              <li>Obtained the Umbral Gauntlets</li>
+            </ul>
+          </li>
+          <li>Headed back to the city; ran into Moss, now working as a guardian at the gate entrance</li>
+          <li>City was attacked by the Team Aqua Cult and the lower floors were flooded</li>
+          <li>Gained entry to the city, ran back to the princess</li>
+          <li>Not sure if we should tell the princess about the found amulet
+            <ul>
+              <li>Told her in the end, but the group still doesn't fully trust her</li>
+              <li>Took a nap to regain strength</li>
+              <li>Asakura and Alera snooped in her office
+                <ul><li>Discovered that Moss comes from a long line of legendary adventurers</li></ul>
+              </li>
+              <li>Went to the wizard's tower to discover how to break Asakura's curse</li>
+              <li>Thanks to Moss' charisma, got info on the curse plus an audience with the wizard librarian, who may know more about Dr. Tombs' book
+                <ul>
+                  <li>Dr. Tombs was a powerful necromancer who once attended the academy here</li>
+                  <li>Went rogue, plotting to revive and control a dead god</li>
+                  <li>No clue on his current whereabouts</li>
+                  <li>Librarian turns out to be the old man who lived in the middle of nowhere a few sessions back</li>
+                  <li>Ends with Asakura strangled by a death knight</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul></div>
+      </details>
+
+      <details class="entry" data-idx="8">
+        <summary><span class="idx">08</span><h3>Goblin Disguises &amp; a Gemstone Bank</h3><span class="caret">&#9656;</span></summary>
+        <div class="content"><ul>
+          <li>Turns out the death knight is an aarakocra belonging to the guy in the cloak</li>
+          <li>The guy wants to know how we found the next clue</li>
+          <li>Realized it was the princess' brother, who runs the Guild</li>
+          <li>We warn the princess
+            <ul>
+              <li>Turns out she already knew</li>
+              <li>Mentions the Thieves' Guild might know the next clue's whereabouts</li>
+              <li>But we had to make a detour for supplies first</li>
+            </ul>
+          </li>
+          <li>Headed to a meteor crash site for supplies from goblins, halflings, and trolls
+            <ul>
+              <li>Saw a witch about to be burned at the stake</li>
+              <li>Rescued her &mdash; her name was Agatha, and she vanished</li>
+              <li>May come back in a good/bad way</li>
+            </ul>
+          </li>
+          <li>Only short characters could get in</li>
+          <li>Used an illusion spell to turn everyone into goblins and snuck in</li>
+          <li>Moss and Bingus interact with the queen</li>
+          <li>Nathan, Alera, and Asakura eye a bank heist</li>
+          <li>Found out the bank only uses rocks &mdash; then that the "rocks" are actually gemstones</li>
+          <li>Asakura dips to one of the four caves</li>
+          <li>Nathan and Alera stay together, originally planning to raid a cave, but discover the guards skim money from the workers
+            <ul>
+              <li>Plan shifts to ambushing the guards for their loot</li>
+              <li>Night falls</li>
+              <li>Asakura procures some boots</li>
+              <li>Bingus and Moss get diamonds</li>
+              <li>Nathan and Alera sneak up on a guard named Gregory, who goes splat on the back bank wall</li>
+            </ul>
+          </li>
+          <li>Head back to the entrance where we saw the packages</li>
+          <li>Went in to get Moss and Bingus, plus the supplies</li>
+          <li>Walked in to find the boxes held captive by catfish people?</li>
+        </ul></div>
+      </details>
+
+      <details class="entry" data-idx="9">
+        <summary><span class="idx">09</span><h3>The Old Man with a Pipe</h3><span class="caret">&#9656;</span></summary>
+        <div class="content"><ul>
+          <li>Fought the catfish people
+            <ul>
+              <li>Nathan and Moss fought over copper</li>
+              <li>Alera defeated the boss and we got the package</li>
+            </ul>
+          </li>
+          <li>Went back to the kingdom</li>
+          <li>Started discussing how to get to the next riddle, which involves the tree</li>
+          <li>Remembered the Thieves' Guild might know something about the missing tree</li>
+          <li>Surina returned from her trip</li>
+          <li>Ventured through town, prepped for the upcoming trip</li>
+          <li>Heart-to-heart with Bingus
+            <ul><li>Told him Nathan wanted nothing to do with the wish, just revenge</li></ul>
+          </li>
+          <li>Started venturing out to the Thieves' Guild</li>
+          <li>Ran into goblins</li>
+          <li>Moss absorbed a man</li>
+          <li>Beat the goblins and had an encounter with an old man with a pipe &mdash; that's where we ended</li>
+        </ul></div>
+      </details>
+
+      <details class="entry" data-idx="10">
+        <summary><span class="idx">10</span><h3>Greatest Desires &amp; Nathan's Backstory</h3><span class="caret">&#9656;</span></summary>
+        <div class="content"><ul>
+          <li>Re-interact with the old pipe man, who asks about our greatest desires
+            <ul>
+              <li>Asakura got his turtle (asked about his turtle)</li>
+              <li>Alera got a compass (asked where the heart of the forest is)</li>
+              <li>Nathan got a fushigi-ball orb thing that let him view his father &mdash; before Dr. Tombs waved the vision's magic away</li>
+              <li>Moss got a bottle with a key inside (asked about Nathan's backstory)</li>
+            </ul>
+          </li>
+          <li>Asakura and Bingus got high</li>
+          <li>Moss dreamt about Nathan's backstory
+            <ul><li>All Moss knows: Nathan, as a kid, had a happy family life until he saw his mother murdered by a figure resembling his father</li></ul>
+          </li>
+          <li>Treaded further to an abandoned coastal town</li>
+          <li>Ran into some rogue rat-people</li>
+          <li>Caught them and asked about the location of the Thieves' Guild</li>
+          <li>Found a well</li>
+          <li>Moss dove in naked</li>
+          <li>Everyone followed suit except Asakura</li>
+          <li>Walked through a sewer</li>
+          <li>Found a village</li>
+          <li>Ran into a bear person who needed help
+            <ul><li>Turns out he got stood up for a date</li></ul>
+          </li>
+        </ul></div>
+      </details>
+
+      <details class="entry" data-idx="11">
+        <summary><span class="idx">11</span><h3>The White Mask Cult</h3><span class="caret">&#9656;</span></summary>
+        <div class="content"><ul>
+          <li>Moss subbed in for the bear person's date</li>
+          <li>Surina and team visit an auction and get a fish</li>
+          <li>Nathan, unamused, heads to the blacksmith
+            <ul>
+              <li>Secretly visits a tailor for a butler suit and mask</li>
+              <li>Finds out about the white mask cult</li>
+              <li>Gets an oversized suit; told to watch for the "mask man"</li>
+              <li>Talks to the smithy about upgrading the gauntlets
+                <ul>
+                  <li>Told it would cost 15 plat</li>
+                  <li>Nathan asks to trade a task instead</li>
+                  <li>Told to find a warehouse key from the cult</li>
+                </ul>
+              </li>
+              <li>Accidentally breaks his fingers after learning items can't be picked up by anyone but their owner
+                <ul>
+                  <li>Had to go get Bingus</li>
+                  <li>Fingers healed</li>
+                </ul>
+              </li>
+              <li>Returns with the gauntlet-upgrade info; team agrees</li>
+              <li>Goes through the sewer system
+                <ul><li>Nathan bitten by a piranha</li></ul>
+              </li>
+              <li>Sees a white cult member just standing in the path &mdash; turns out it's Asakura, in a white mask cult outfit</li>
+              <li>The mask has some addictive magic that won't let your body take it off</li>
+              <li>Group heads to a white mask cult bar
+                <ul>
+                  <li>Bar is run by frog people in the back; a being with purple gem eyes writes messages</li>
+                  <li>Went in disguise via Asakura's disguise magic</li>
+                  <li>Alera and Nathan notice no one inside is speaking &mdash; everyone just gets a message and leaves</li>
+                  <li>Relayed telepathically via Asakura</li>
+                  <li>Everyone sat and awaited their message
+                    <ul>
+                      <li>Bingus: take care of a member in the back &mdash; given a gun</li>
+                      <li>Asakura: told to walk out</li>
+                      <li>Alera: task was to kill Asakura</li>
+                      <li>Nathan: task was to kill Asakura's turtle</li>
+                      <li>Surina: task was to help Bingus in the back</li>
+                    </ul>
+                  </li>
+                  <li>Everyone splits up
+                    <ul>
+                      <li><b>Asakura, Nathan, Alera:</b> the two follow Asakura to the end of a sewer path, trying to figure out how to handle the situation; Asakura realizes what's happening and panics</li>
+                      <li><b>Bingus &amp; Surina:</b> Surina finds Bingus in the back, caressing the cult member he was supposed to kill; he heals the member's curse instead, and Surina asks about the warehouse key &mdash; turns out the frog people and the big boss have it; they run out immediately after</li>
+                    </ul>
+                  </li>
+                  <li>Bingus and Surina catch up with Nathan and the others, but the team doesn't notice 3 frog assassins closing in</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul></div>
+      </details>
+
+      <details class="entry" data-idx="12">
+        <summary><span class="idx">12</span><h3>The Toad King's Court</h3><span class="caret">&#9656;</span></summary>
+        <div class="content"><ul>
+          <li>Interrupted by 3 frog assassins: Richard, Pepe, and one other frog</li>
+          <li>The frogs are only after Asakura, for leading the group to the cult hideout</li>
+          <li>Team tries talking (and magic tricks, courtesy of Nathan) to get to the leader for the keys</li>
+          <li>Between the antics and Moss falling from the sky onto one of the frogs, they decide to haul everyone to the Toad King instead</li>
+          <li>En route, Moss informs everyone we are now sponsored by Mug Root Beer</li>
+          <li>At the entrance, the Toad King just wants to kill Asakura</li>
+          <li>Asakura offered a trade: his turtle for his life, plus 600 gold</li>
+          <li>Accepts &mdash; then is revealed to have been a doppelganger the whole time</li>
+          <li>Group fights the doppelganger; after many attempts, it escapes</li>
+          <li>Nathan still needs the warehouse key, so he talks Pepe into helping in exchange for adventure</li>
+          <li>Pepe agrees, helps Nathan get the key from his father, the Toad King</li>
+          <li>Pepe sticks around afterward, tagging along with Nathan and the gang &mdash; Nathan's way of making good on the adventure he owes him</li>
+          <li>Nathan succeeds and grabs the key, but notices a captive being held hostage
+            <ul>
+              <li>Offers help, but she needed a remote to be freed</li>
+              <li>Can't risk another encounter, so he leaves her &mdash; but will likely tell the group</li>
+            </ul>
+          </li>
+          <li>Meanwhile the group loots magical artifacts, including a skeleton key</li>
+          <li>Richard dies to the doppelganger</li>
+          <li>Nathan comes out to find the team doing miscellaneous things</li>
+        </ul></div>
+      </details>
+
+      <details class="entry" data-idx="13">
+        <summary><span class="idx">13</span><h3>Cursed Gloves &amp; a Labubu</h3><span class="caret">&#9656;</span></summary>
+        <div class="content"><ul>
+          <li>Group decides to return to the city</li>
+          <li>Nathan goes to recover the keys
+            <ul>
+              <li>Finds out the Thieves' Guild stole his gauntlets</li>
+              <li>Threatens the guy &mdash; fails</li>
+              <li>Given a map of the sewers and instructions to the guild, plus some cursed gauntlets</li>
+            </ul>
+          </li>
+          <li>Walks into the tunnels toward the Thieves' Guild after a long rest</li>
+          <li>Encounters a slime monster asking for the password</li>
+          <li>Gives the password, proceeds to the guild</li>
+          <li>Asakura gets drunk off water</li>
+          <li>Bingus is acting different (keep an eye on him)</li>
+          <li>Learns Richard was a member of the guild</li>
+          <li>Nathan tries to peruse the guild, stopped by a Cheshire cat figure</li>
+          <li>Learns the guild does have his gauntlets &mdash; asks what it'd take to get them back
+            <ul>
+              <li>The cat offers guild membership plus one completed mission</li>
+              <li>Nathan and Alera both join, for the benefits and the intel the guild might get Nathan</li>
+            </ul>
+          </li>
+          <li>Nathan and Alera enter a back room full of treasure</li>
+          <li>All doors have locks</li>
+          <li>Alera finds a hammer with Fix-It-Felix powers
+            <ul><li>Accidentally fixes the lock on a tough door</li></ul>
+          </li>
+          <li>Nathan puts on the cursed gloves
+            <ul><li>Immense strength, at the cost of his intelligence</li></ul>
+          </li>
+          <li>Destroys the door, finds a chest and a Labubu</li>
+          <li>After opening the one door, the guild starts rumbling &mdash; where we ended</li>
+        </ul></div>
+      </details>
+
+      <details class="entry" data-idx="13a">
+        <summary><span class="idx">13a</span><h3>The Monster Truck Derby <span class="badge">Filler</span></h3><span class="caret">&#9656;</span></summary>
+        <div class="content"><ul>
+          <li>Sometime between the last session and a future endeavor, given a quest by Princess Lysandra to help a Leonin whose kingdom is ruled by a tyrant</li>
+          <li>Met at a fae cafe</li>
+          <li>The Leonin explains: the king who governs the sky kingdom is making everyone go bald, and he needs help overthrowing him
+            <ul><li>The only way in is to enter a monster truck derby competition</li></ul>
+          </li>
+          <li>Everyone agrees, gets instantly teleported to the kingdom</li>
+          <li>2 guards on duty, one peeing and one guarding
+            <ul><li>Moss compliments the peeing guard</li></ul>
+          </li>
+          <li>Given access to the kingdom; everyone is bald
+            <ul><li>The glare off the balding citizens forces a sunglasses purchase</li></ul>
+          </li>
+          <li>Head to the coliseum &mdash; too late to formally join the derby</li>
+          <li>Alera and Asakura spot a free opening by the trucks; Nathan sneaks in to grab pit-crew clothes</li>
+          <li>Nathan sneaks into the employee room (with Pepe's help), finds 5 trucks and racers debating whether to even join</li>
+          <li>Nathan convinces them to quit, undetected, and takes their crew jackets</li>
+          <li>The crew lead notices everyone's gone and asks who Nathan is
+            <ul>
+              <li>Told everyone quit and didn't want to participate</li>
+              <li>Lead says he still needs drivers &mdash; Nathan says he knows some people (the party)</li>
+            </ul>
+          </li>
+          <li>Everyone climbs into the race trucks to prep for battle</li>
+          <li>First truck taken down by Nathan, who jumps through the window and knocks the driver clean out</li>
+          <li>Then comes the Governor, Mr. 305 &mdash; heavily armored, impenetrable car</li>
+          <li>The Leonin, now known as McScoogy, hits one of his tires, damaging it</li>
+          <li>Team focuses fire on the tires as the weak point</li>
+          <li>Mr. 305 takes down Nathan's and Pepe's cars</li>
+          <li>Asakura destroys a tire; Alera destroys another</li>
+          <li>Moss builds a kamikaze airplane and divebombs with Bingus into the back of the car, denting it</li>
+          <li>Nathan jumps onto the back and punches the dent until a big hole opens</li>
+          <li>McScoogy lands the final blow through the hole, stopping the car</li>
+          <li>Moss turns his spirit weapon into a ball and beans the windshield, knocking out Mr. 305</li>
+          <li>Party secures the baldness-causing amulet; McScoogy returns hair to all the people</li>
+          <li>McScoogy keeps Mr. 305 as his personal form of entertainment</li>
+        </ul></div>
+      </details>
+
+      <details class="entry" data-idx="14">
+        <summary><span class="idx">14</span><h3>The Wood Dragon</h3><span class="caret">&#9656;</span></summary>
+        <div class="content"><ul>
+          <li>Preface: I wasn't available, so my character Nathan was trapped inside a Labubu</li>
+          <li>Main synopsis: the rumbling turned out to be a wood dragon searching for the heart of the forest, which was in the Thieves' Guild. The team opened doors and fought off wood zombie creatures sent to distract the dragon.</li>
+          <li>They also meet Gorax the Destroyer, who has a deep hatred for trees and demolishes a ton of tree zombies</li>
+          <li>The heart was found; Moss got hurt by the spikes guarding it</li>
+          <li>Surina grabbed the heart and tried to return it to the dragon</li>
+          <li>Asakura (now known as Marty Supreme) found Pokemon cards and fell to his doom</li>
+          <li>Surina threw the heart at the dragon, opening a portal into it &mdash; everyone went in and was transported into the second dungeon</li>
+        </ul></div>
+      </details>
+
+      <details class="entry" data-idx="15">
+        <summary><span class="idx">15</span><h3>The Trial of Perseverance</h3><span class="caret">&#9656;</span></summary>
+        <div class="content"><ul>
+          <li>Entering the dungeon, Nathan was freed, but Moss and Alera were sent into the Labubu</li>
+          <li>Three paths available
+            <ul>
+              <li>A tree village (avoided &mdash; Gorax might destroy it)</li>
+              <li>An egg-shaped dome, where a tree golem and a rock golem were duking it out</li>
+              <li>A river where a wyvern was dwelling</li>
+            </ul>
+          </li>
+          <li>Went for the dome path</li>
+          <li>Encountered a cave full of webs, then a giant spider</li>
+          <li>Nathan killed the first spider</li>
+          <li>2 more spiders appeared &mdash; Gorax and the gang took them out (Nathan bitten on the head, Bingus trapped in the web)</li>
+          <li>Left the caves, ran into a scout crew of druid barbarians</li>
+          <li>Wary of us, they dressed Nathan up as a barbarian to scout the area</li>
+          <li>The barbarians accepted Nathan into the crew, said the area was on lockdown, and brought him into the dwelling</li>
+          <li>Inside: a giant fitness dwelling where the barbarians were prepping for something</li>
+          <li>After talking with a bunch of barbarians and a bit of rest, Nathan learns the barbarians and elves are competing in a 50-year-long game to determine the fate of the forest</li>
+          <li>Nathan meets the chief, who explains the games and gets the group entry into the cave</li>
+          <li>Nathan also learns that if the druids win, they'll burn the forest to the ground</li>
+          <li>Nathan secures the group's entry and recalls what he was told</li>
+          <li>As the group starts to relax, horns sound, the chief emerges in white bear form, and declares the games begin</li>
+        </ul></div>
+      </details>
+
+      <details class="entry" data-idx="16">
+        <summary><span class="idx">16</span><h3>The Fifty-Year Game</h3><span class="caret">&#9656;</span></summary>
+        <div class="content"><ul>
+          <li>The chief sets the lineup for the game (he can't play, having played last round &mdash; it's run like a League of Legends tourney)</li>
+          <li>Lineup: Nathan, the chief's brother, 2 more druids, and a gnome who benched the chief last round</li>
+          <li>Nathan is, essentially, the jungler</li>
+          <li>While he preps, the team handles other business
+            <ul>
+              <li>Surina got sent into the Labubu</li>
+              <li>Moss and Gorax went to the gnome offices</li>
+              <li>Asakura went to rest</li>
+              <li>Alera and the half-god (who can now partially separate from her, Jojo's-stand style) went to ask more about the games</li>
+            </ul>
+          </li>
+          <li>Alera learns from the elves (the opposing team) that if they win, they'll hunt all non-plant creatures</li>
+          <li>Nathan gets to use his shadow gloves &mdash; he can command a shadow clone that mimics him 5 seconds later</li>
+          <li>Meanwhile
+            <ul>
+              <li>Moss and Gorax enter the gnome-run Reception office to retrieve the trophy, believed to hold the second jewel
+                <ul>
+                  <li>Moss gets explosive diarrhea from a hotdog</li>
+                  <li>Literally shits on the receptionist, traumatizing her</li>
+                  <li>Gorax grabs the trophy but falls with it, dazing himself</li>
+                  <li>Moss just watches</li>
+                </ul>
+              </li>
+              <li>Alera tries to get intel, gets annoyed at the food booth; the demigod blows up the food stalls, causing a commotion
+                <ul>
+                  <li>They end up at the reception office and see the aftermath of Moss</li>
+                  <li>They reach the Gnome King's quarters, attack, and get defeated by the gnome guard mages</li>
+                  <li>Moss still watches from afar</li>
+                </ul>
+              </li>
+              <li>Marty Supreme wakes up to gnomes ransacking the druid camp and fouling their protein powder
+                <ul>
+                  <li>Once they notice he's awake, the gnomes bag him and try to drown him at the river for seeing too much</li>
+                  <li>Moss tries to message-trick the gnomes &mdash; fails</li>
+                  <li>Tries again on the dumbest gnome &mdash; succeeds, and escapes</li>
+                  <li>The other gnomes toss the dumb gnome down the waterfall instead</li>
+                  <li>Marty casts feather fall to soften the gnome's landing</li>
+                  <li>Marty, content, watches the gnome resurface (more on that next time)</li>
+                </ul>
+              </li>
+              <li>Nathan fights a ton of beasts, racking up points for the druids</li>
+              <li>Nathan asks an elf why the elves and druids are trying to destroy each other, and whether peace was ever on the table
+                <ul><li>Nathan suspects the gnomes are behind it, since they act as intermediaries to both tribes</li></ul>
+              </li>
+              <li>Nathan catches the dumb gnome and interrogates him, learning the gnomes' whole plan
+                <ul><li>Get the elves and druids to wipe each other out, then take the land for themselves</li></ul>
+              </li>
+              <li>Nathan kicks the gnome back up the waterfall &mdash; the gnome warns Marty of a great evil he encountered, not realizing the "evil" was Nathan himself, having just used fear tactics on him to get the information</li>
+            </ul>
+          </li>
+        </ul></div>
+      </details>
+
+    </div>
+    </section>
+
+    <section class="tab-panel" data-tab="bios">
+      <p class="section-intro">What the table actually knows about each character so far &mdash; abilities, ties, and the loose threads still hanging off them. Nothing here is invented beyond what's played out on screen.</p>
+      <div class="bio-grid">
+
+        <div class="bio-card">
+          <div class="bio-head"><h3>Nathan</h3><span class="bio-count" data-tally="Nathan"></span></div>
+          <p class="bio-alias">&ldquo;These hands&rdquo;</p>
+          <ul>
+            <li>Melee brawler; Umbral Fists forged from umbral iron (S6), finished into the Umbral Gauntlets (S7)</li>
+            <li>Later upgraded the gauntlets by running a favor for the white mask cult (S11)</li>
+            <li>Wears cursed gloves &mdash; immense strength, at the cost of his intelligence (S13)</li>
+            <li>Shadow gloves let him command a shadow clone that mimics him 5 seconds later (S16)</li>
+            <li>Holds a temp adventurers' guild ID (S3), later joined the Thieves' Guild for leverage on his stolen gauntlets (S13)</li>
+            <li>Dr. Tombs is his father. Confirmed via the pipe man's fushigi-ball orb, which let Nathan view him before Tombs waved the vision's magic away (S10)</li>
+            <li>Per Moss's dream (S10): young Nathan saw his mother murdered by a figure resembling that same father &mdash; the rest of the party doesn't know any of this yet</li>
+            <li>Told Bingus he wants nothing to do with "the wish," only revenge (S9)</li>
+          </ul>
+        </div>
+
+        <div class="bio-card">
+          <div class="bio-head"><h3>Asakura</h3></div>
+          <p class="bio-alias">Now going by &ldquo;Marty Supreme&rdquo;</p>
+          <ul>
+            <li>Illusion/disguise magic; got his turtle back from the old pipe man (S10)</li>
+            <li>Cursed by Dr. Tombs (S7); later stuck wearing an addictive white mask cult mask that wouldn't come off (S11)</li>
+            <li>Was secretly swapped for a doppelganger for at least one full arc (S12) &mdash; the real Asakura's whereabouts during that stretch were never confirmed</li>
+            <li>Renamed himself Marty Supreme after finding Pokemon cards and falling to his doom (S14)</li>
+            <li>Reckless streak: got drunk off water, dove into a well, walked straight into the cult's hideout</li>
+          </ul>
+        </div>
+
+        <div class="bio-card">
+          <div class="bio-head"><h3>Moss</h3></div>
+          <p class="bio-alias">Eats moss, chasing &ldquo;new experiences&rdquo;</p>
+          <ul>
+            <li>Introduced Session 2, on a self-described quest for new experiences</li>
+            <li>Revealed to come from a long line of legendary adventurers (via Asakura &amp; Alera's snooping, S7)</li>
+            <li>High charisma &mdash; talked the wizard's tower into helping break Asakura's curse (S7)</li>
+            <li>Carries a spirit weapon that can turn into a thrown ball (S13a, S16)</li>
+            <li>Chaos agent: absorbed a man (S9), dove into a well naked (S10), gave a receptionist explosive diarrhea (S16)</li>
+            <li>Has been shoved into the Labubu more than once</li>
+          </ul>
+        </div>
+
+        <div class="bio-card">
+          <div class="bio-head"><h3>Bingus</h3></div>
+          <ul>
+            <li>Party healer &mdash; mended Nathan's shattered fingers (S11), cured a cult member's curse instead of killing him (S11)</li>
+            <li>Soft-hearted under pressure: heals where the mission called for a kill</li>
+            <li>Flagged in Session 13 as "acting different" &mdash; never followed up on</li>
+            <li>Co-built the kamikaze airplane with Moss during the derby (S13a)</li>
+          </ul>
+        </div>
+
+        <div class="bio-card">
+          <div class="bio-head"><h3>Alera</h3></div>
+          <ul>
+            <li>Shares her body with a bonded half-god/demigod &mdash; the two now share the same body, though it can partially separate and act on its own, Jojo's-stand style (S16)</li>
+            <li>The half-god blew up the food stalls at the druid/elf games while trying to gather intel (S16); may get his own bio card once more is known about him</li>
+            <li>Got a compass from the old pipe man, tied to the location of the heart of the forest (S10)</li>
+            <li>Wields a hammer with "Fix-It-Felix" powers &mdash; fixes whatever it hits, intentionally or not (S13)</li>
+            <li>Landed the killing blow on the catfish boss (S9)</li>
+          </ul>
+        </div>
+
+        <div class="bio-card">
+          <div class="bio-head"><h3>Surina</h3><span class="bio-count" data-tally="Surina"></span></div>
+          <ul>
+            <li>Away on her own trip for the first several sessions; returned Session 9</li>
+            <li>Retrieved the heart of the forest and threw it into the wood dragon, opening the portal to the second dungeon (S14)</li>
+            <li>Sent into the Labubu on more than one occasion</li>
+            <li>Lowest kill count at the table so far &mdash; lighter combat role, or just better at avoiding the credit</li>
+          </ul>
+        </div>
+
+        <div class="bio-card">
+          <div class="bio-head"><h3>Gorax</h3><span class="bio-count" data-tally="Gorax"></span></div>
+          <p class="bio-alias">&ldquo;The Destroyer&rdquo;</p>
+          <ul>
+            <li>Joined the party mid-dungeon, Session 14</li>
+            <li>Deep, specific hatred of trees &mdash; single-handedly wrecked most of the wood zombie horde</li>
+            <li>By far the highest kill count in the party</li>
+            <li>Not the most tactically graceful: fell while grabbing the gnome trophy and dazed himself (S16); tends to just watch when things go sideways</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <h3 class="bio-divider">Side Characters</h3>
+      <p class="section-intro">The NPCs who keep showing up, for better or worse.</p>
+      <div class="bio-grid">
+
+        <div class="bio-card">
+          <div class="bio-head"><h3>Dr. Tombs</h3><span class="badge role-antagonist">Antagonist</span></div>
+          <ul>
+            <li>Rogue necromancer, once studied at the wizards' academy; plotting to revive and control a dead god (S7)</li>
+            <li>Cursed Asakura (S7); his book turned up in Wendell's manor (S4)</li>
+            <li>Revealed to be Nathan's father (S10) &mdash; Nathan hasn't told the party</li>
+            <li>Current whereabouts unknown</li>
+          </ul>
+        </div>
+
+        <div class="bio-card">
+          <div class="bio-head"><h3>Wendell</h3><span class="badge role-antagonist">Antagonist &middot; resolved</span></div>
+          <ul>
+            <li>Ran the water-logged town's manor, secretly working for Dr. Tombs (S4)</li>
+            <li>Exposed as the villain behind the Wendigo and the missing villagers</li>
+            <li>Died to cyanide shortly after being found out (S5)</li>
+          </ul>
+        </div>
+
+        <div class="bio-card">
+          <div class="bio-head"><h3>Princess Lysandra</h3><span class="badge role-ally">Ally &middot; uncertain</span></div>
+          <ul>
+            <li>Working with the party for access to the Gauntlet of Gems (S5 onward)</li>
+            <li>Party still doesn't fully trust her (S7)</li>
+            <li>Already knew her brother runs "the Guild" behind at least one attack on the party (S8)</li>
+          </ul>
+        </div>
+
+        <div class="bio-card">
+          <div class="bio-head"><h3>Agatha</h3><span class="badge role-wildcard">Wildcard</span></div>
+          <ul>
+            <li>Witch rescued from the stake at the meteor crash site (S8)</li>
+            <li>Vanished right after &mdash; may come back in a good or bad way</li>
+          </ul>
+        </div>
+
+        <div class="bio-card">
+          <div class="bio-head"><h3>The Old Pipe Man</h3><span class="badge role-wildcard">Wildcard</span></div>
+          <ul>
+            <li>Grants "greatest desires" in exchange for information (S9&ndash;10)</li>
+            <li>Gave Asakura his turtle, Alera a compass, Nathan a fushigi-ball orb, and Moss a bottled key &mdash; each tied to something he wanted to learn in return</li>
+            <li>Showed Nathan a vision of his father, cut short when Dr. Tombs waved the magic away (S10)</li>
+          </ul>
+        </div>
+
+        <div class="bio-card">
+          <div class="bio-head"><h3>Pepe</h3><span class="badge role-ally">Ally</span></div>
+          <ul>
+            <li>One of three frog assassins sent after Asakura (S11&ndash;12)</li>
+            <li>Helped Nathan get the warehouse key from his father, the Toad King, in exchange for adventure (S12)</li>
+            <li>Now travels with Nathan and the gang, making good on that debt</li>
+          </ul>
+        </div>
+
+        <div class="bio-card">
+          <div class="bio-head"><h3>The Toad King</h3><span class="badge role-neutral">Neutral</span></div>
+          <ul>
+            <li>Pepe's father and ruler of the frog people; wanted Asakura dead over the cult hideout (S12)</li>
+            <li>Held the warehouse key and a captive the party still owes a rescue</li>
+          </ul>
+        </div>
+
+        <div class="bio-card">
+          <div class="bio-head"><h3>The Wizard Librarian</h3><span class="badge role-ally">Ally &middot; informant</span></div>
+          <ul>
+            <li>The same "old man" who tried to kill the party back in Session 3</li>
+            <li>Turned out to be the wizards' academy librarian, with firsthand knowledge of Dr. Tombs (S7)</li>
+          </ul>
+        </div>
+
+        <div class="bio-card">
+          <div class="bio-head"><h3>The Cheshire Cat</h3><span class="badge role-neutral">Broker</span></div>
+          <ul>
+            <li>Runs the Thieves' Guild; holds Nathan's stolen gauntlets (S13)</li>
+            <li>Offered Nathan and Alera membership plus one completed mission in exchange for the gauntlets back</li>
+          </ul>
+        </div>
+
+        <div class="bio-card">
+          <div class="bio-head"><h3>McScoogy</h3><span class="badge role-ally">Ally &middot; arc resolved</span></div>
+          <ul>
+            <li>The Leonin who recruited the party to overthrow the bald-making tyrant king (S13a)</li>
+            <li>Won the monster truck derby with the party's help; restored hair to the kingdom</li>
+            <li>Kept Mr. 305 as his own personal form of entertainment</li>
+          </ul>
+        </div>
+
+        <div class="bio-card">
+          <div class="bio-head"><h3>Mr. 305</h3><span class="badge role-antagonist">Antagonist &middot; defeated</span></div>
+          <ul>
+            <li>The armored Governor and derby champion the party had to take down tire by tire (S13a)</li>
+            <li>Defeated, then kept by McScoogy as a personal form of entertainment</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="tab-panel" data-tab="mysteries">
+      <p class="section-intro">The threads still open across the campaign, in roughly the order they surfaced. Status reflects what's known as of Session 16.</p>
+      <div id="mysteries">
+
+        <details class="entry">
+          <summary><span class="idx">M1</span><h3>The Gauntlet of Gems <span class="badge status-progress">In progress</span></h3><span class="caret">&#9656;</span></summary>
+          <div class="content"><ul>
+            <li>First gem won from the statue trial in the first gauntlet dungeon (S6)</li>
+            <li>Second gem believed hidden in the trophy at the druid-vs-elf tournament, still being pursued as of S16</li>
+            <li>The gauntlet needs 5 gems total &mdash; 3 still to find after this one</li>
+          </ul></div>
+        </details>
+
+        <details class="entry">
+          <summary><span class="idx">M2</span><h3>Dr. Tombs &amp; the Dead God <span class="badge status-unresolved">Unresolved</span></h3><span class="caret">&#9656;</span></summary>
+          <div class="content"><ul>
+            <li>A rogue necromancer who once studied at the wizards' academy, plotting to revive and control a dead god (S7)</li>
+            <li>His book turned up in Wendell's manor (S4); he later cursed Asakura (S7)</li>
+            <li>Turns out to be Nathan's father &mdash; confirmed when the pipe man's fushigi-ball orb let Nathan glimpse him, right before Tombs waved the vision's magic away (S10)</li>
+            <li>Ties directly to what Moss saw in his dream about Nathan's mother's murder (S10); Nathan hasn't told the rest of the party any of this</li>
+            <li>Current whereabouts still unknown</li>
+          </ul></div>
+        </details>
+
+        <details class="entry">
+          <summary><span class="idx">M3</span><h3>Lord Baskerville's Disappearance <span class="badge status-unresolved">Unresolved</span></h3><span class="caret">&#9656;</span></summary>
+          <div class="content"><ul>
+            <li>Missing since before Session 3, with his three children fighting over succession</li>
+            <li>Eldest daughter and son are favored heirs; youngest son is regarded as an idiot</li>
+            <li>No one will explain the riddle around it without high standing</li>
+            <li>Hasn't been picked back up since it was first raised</li>
+          </ul></div>
+        </details>
+
+        <details class="entry">
+          <summary><span class="idx">M4</span><h3>Princess Lysandra's Real Agenda <span class="badge status-simmer">Simmering distrust</span></h3><span class="caret">&#9656;</span></summary>
+          <div class="content"><ul>
+            <li>The party works with her for gem access, but doesn't fully trust her (S7)</li>
+            <li>She already knew her brother runs "the Guild" behind at least one attack on the party, and never fully explained why (S8)</li>
+          </ul></div>
+        </details>
+
+        <details class="entry">
+          <summary><span class="idx">M5</span><h3>The White Mask Cult &amp; the Doppelganger <span class="badge status-unresolved">Unresolved</span></h3><span class="caret">&#9656;</span></summary>
+          <div class="content"><ul>
+            <li>Addictive mask magic, a purple-gem-eyed figure writing messages, and a leadership run by frog people and a "big boss" (S11)</li>
+            <li>A doppelganger stood in for Asakura for at least one full arc before escaping mid-fight (S12)</li>
+            <li>The frog people and their boss still hold whatever info points to the warehouse key's larger significance</li>
+          </ul></div>
+        </details>
+
+        <details class="entry">
+          <summary><span class="idx">M6</span><h3>The Gnome Conspiracy <span class="badge status-progress">Just uncovered</span></h3><span class="caret">&#9656;</span></summary>
+          <div class="content"><ul>
+            <li>The dumb gnome confirmed the gnomes are engineering the druid/elf war on purpose (S16)</li>
+            <li>Plan: get both sides to wipe each other out, then take the land for themselves</li>
+            <li>The party knows now, but hasn't acted on it yet</li>
+          </ul></div>
+        </details>
+
+        <details class="entry">
+          <summary><span class="idx">M7</span><h3>What Is the Labubu? <span class="badge status-unresolved">Running mystery</span></h3><span class="caret">&#9656;</span></summary>
+          <div class="content"><ul>
+            <li>A recurring "prison" that's swallowed Nathan, Moss, Alera, and Surina at different points (S13 onward)</li>
+            <li>Never explained &mdash; just keeps happening</li>
+          </ul></div>
+        </details>
+
+      </div>
+    </section>
+
+    <section class="tab-panel" data-tab="watch">
+      <p class="section-intro">Loose threads and throwaway lines that got flagged in the moment &mdash; worth remembering before they pay off.</p>
+      <ul class="watch-list">
+        <li class="watch-item"><span class="dot"></span><p>Bingus has been "acting different" since the Thieves' Guild tunnels &mdash; flagged at the time, never followed up.</p><span class="tag">S13</span></li>
+        <li class="watch-item"><span class="dot"></span><p>Agatha, the witch pulled off the stake at the meteor crash site, vanished right after &mdash; may come back in a good or bad way.</p><span class="tag">S8</span></li>
+        <li class="watch-item"><span class="dot"></span><p>Nathan left a captive behind at the Toad King's warehouse, who needed a "remote" to be freed. He meant to tell the group &mdash; unclear if he ever did.</p><span class="tag">S12</span></li>
+      </ul>
+    </section>
+  </main>
+</div>
+
+<script>
+(function(){
+  var DEFAULTS = [
+    { key: 'Surina', count: 2 },
+    { key: 'Gorax', count: 100 },
+    { key: 'Nathan', count: 23 }
+  ];
+  var STORAGE_KEY = 'these-hands-killcount-v1';
+
+  function loadTally(){
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length) return parsed;
+      }
+    } catch(e){}
+    return DEFAULTS.map(function(d){ return { key: d.key, count: d.count }; });
+  }
+  function saveTally(data){
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e){}
+  }
+
+  var tally = loadTally();
+  var tallyList = document.getElementById('tallyList');
+  var tallyTotal = document.getElementById('tallyTotal');
+
+  function renderTally(){
+    tallyList.innerHTML = '';
+    var total = 0;
+    tally.forEach(function(row, i){
+      total += row.count;
+      var li = document.createElement('li');
+      li.className = 'tally-row';
+      li.innerHTML =
+        '<span class="tally-name"><span class="dot"></span>' + row.key + '</span>' +
+        '<span class="tally-count" data-i="'+i+'">'+row.count+'</span>' +
+        '<span class="stepper">' +
+          '<button data-act="dec" data-i="'+i+'" aria-label="Decrease '+row.key+' kill count">&minus;</button>' +
+          '<button data-act="inc" data-i="'+i+'" aria-label="Increase '+row.key+' kill count">+</button>' +
+        '</span>';
+      tallyList.appendChild(li);
+    });
+    tallyTotal.textContent = total;
+
+    tally.forEach(function(row){
+      document.querySelectorAll('[data-tally="'+row.key+'"]').forEach(function(el){
+        el.textContent = row.count + (row.count === 1 ? ' kill' : ' kills');
+      });
+    });
+  }
+  renderTally();
+
+  tallyList.addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    var i = parseInt(btn.getAttribute('data-i'), 10);
+    if (btn.getAttribute('data-act') === 'inc') tally[i].count++;
+    else tally[i].count = Math.max(0, tally[i].count - 1);
+    saveTally(tally);
+    renderTally();
+  });
+
+  document.getElementById('resetTally').addEventListener('click', function(){
+    tally = DEFAULTS.map(function(d){ return { key: d.key, count: d.count }; });
+    saveTally(tally);
+    renderTally();
+  });
+
+  // ---------- Character filter chips ----------
+  var CHARACTERS = ['Nathan', 'Asakura', 'Moss', 'Bingus', 'Alera', 'Surina', 'Gorax'];
+  var chipPanel = document.getElementById('chipPanel');
+  var activeChips = new Set();
+
+  CHARACTERS.forEach(function(name){
+    var chip = document.createElement('button');
+    chip.className = 'chip';
+    chip.type = 'button';
+    chip.textContent = name;
+    chip.addEventListener('click', function(){
+      if (activeChips.has(name)) { activeChips.delete(name); chip.classList.remove('active'); }
+      else { activeChips.add(name); chip.classList.add('active'); }
+      applyFilter();
+    });
+    chipPanel.appendChild(chip);
+  });
+
+  // ---------- Search + filter ----------
+  var searchInput = document.getElementById('searchInput');
+  var entries = Array.prototype.slice.call(document.querySelectorAll('#sessions .entry'));
+  var noResults = document.getElementById('noResults');
+  var priorOpenState = new Map();
+  var filtering = false;
+
+  entries.forEach(function(entry){
+    entry.addEventListener('toggle', function(){
+      if (!filtering) priorOpenState.set(entry, entry.open);
+    });
+    priorOpenState.set(entry, entry.open);
+  });
+
+  function highlightText(query){
+    entries.forEach(function(entry){
+      var marks = entry.querySelectorAll('mark');
+      marks.forEach(function(m){
+        var parent = m.parentNode;
+        parent.replaceChild(document.createTextNode(m.textContent), m);
+        parent.normalize();
+      });
+    });
+    if (!query) return;
+    var walker;
+    entries.forEach(function(entry){
+      walker = document.createTreeWalker(entry, NodeFilter.SHOW_TEXT, null);
+      var nodes = [];
+      var n;
+      while ((n = walker.nextNode())) nodes.push(n);
+      nodes.forEach(function(node){
+        var text = node.nodeValue;
+        var lower = text.toLowerCase();
+        var idx = lower.indexOf(query);
+        if (idx === -1) return;
+        var frag = document.createDocumentFragment();
+        var cursor = 0;
+        while (idx !== -1) {
+          frag.appendChild(document.createTextNode(text.slice(cursor, idx)));
+          var mark = document.createElement('mark');
+          mark.textContent = text.slice(idx, idx + query.length);
+          frag.appendChild(mark);
+          cursor = idx + query.length;
+          idx = lower.indexOf(query, cursor);
+        }
+        frag.appendChild(document.createTextNode(text.slice(cursor)));
+        node.parentNode.replaceChild(frag, node);
+      });
+    });
+  }
+
+  function applyFilter(){
+    var query = searchInput.value.trim().toLowerCase();
+    var hasChips = activeChips.size > 0;
+    var active = query.length > 0 || hasChips;
+
+    if (active && !filtering) {
+      entries.forEach(function(entry){ priorOpenState.set(entry, entry.open); });
+    }
+    filtering = active;
+
+    var anyVisible = false;
+    entries.forEach(function(entry){
+      var text = entry.textContent.toLowerCase();
+      var matchesQuery = !query || text.indexOf(query) !== -1;
+      var matchesChips = !hasChips || Array.from(activeChips).every(function(name){
+        return text.indexOf(name.toLowerCase()) !== -1;
+      });
+      var matches = matchesQuery && matchesChips;
+      entry.classList.toggle('hide', !matches);
+      if (matches) {
+        anyVisible = true;
+        if (active) entry.open = true;
+      }
+      if (!active) entry.open = priorOpenState.get(entry) || false;
+    });
+
+    highlightText(query);
+    noResults.classList.toggle('show', !anyVisible);
+  }
+
+  searchInput.addEventListener('input', applyFilter);
+
+  document.getElementById('expandAll').addEventListener('click', function(){
+    entries.forEach(function(e){ e.open = true; priorOpenState.set(e, true); });
+  });
+  document.getElementById('collapseAll').addEventListener('click', function(){
+    entries.forEach(function(e){ e.open = false; priorOpenState.set(e, false); });
+  });
+
+  document.getElementById('jumpLatest').addEventListener('click', function(){
+    searchInput.value = '';
+    activeChips.clear();
+    chipPanel.querySelectorAll('.chip.active').forEach(function(c){ c.classList.remove('active'); });
+    applyFilter();
+    var latest = entries[entries.length - 1];
+    latest.open = true;
+    priorOpenState.set(latest, true);
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    latest.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  });
+
+  // Default: most recent session open on load
+  entries[entries.length - 1].open = true;
+  priorOpenState.set(entries[entries.length - 1], true);
+
+  // ---------- Tabs ----------
+  var tabBtns = Array.prototype.slice.call(document.querySelectorAll('.tab-btn'));
+  var tabPanels = Array.prototype.slice.call(document.querySelectorAll('.tab-panel'));
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var target = btn.getAttribute('data-tab');
+      tabBtns.forEach(function(b){ b.classList.toggle('active', b === btn); });
+      tabPanels.forEach(function(p){ p.classList.toggle('active', p.getAttribute('data-tab') === target); });
+    });
+  });
+})();
+</script>
