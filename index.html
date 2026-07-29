@@ -1228,7 +1228,7 @@
         </div>
 
         <div class="bio-card">
-          <div class="bio-head"><h3>Asakura</h3></div>
+          <div class="bio-head"><h3>Asakura</h3><span class="bio-count" data-tally="Asakura"></span></div>
           <p class="bio-alias">Now going by &ldquo;Marty Supreme&rdquo;</p>
           <ul>
             <li>Illusion/disguise magic; got his turtle back from the old pipe man (S10)</li>
@@ -1240,7 +1240,7 @@
         </div>
 
         <div class="bio-card">
-          <div class="bio-head"><h3>Moss</h3></div>
+          <div class="bio-head"><h3>Moss</h3><span class="bio-count" data-tally="Moss"></span></div>
           <p class="bio-alias">Eats moss, chasing &ldquo;new experiences&rdquo;</p>
           <ul>
             <li>Introduced Session 2, on a self-described quest for new experiences</li>
@@ -1253,7 +1253,7 @@
         </div>
 
         <div class="bio-card">
-          <div class="bio-head"><h3>Bingus</h3></div>
+          <div class="bio-head"><h3>Bingus</h3><span class="bio-count" data-tally="Bingus"></span></div>
           <ul>
             <li>Party healer &mdash; mended Nathan's shattered fingers (S11), cured a cult member's curse instead of killing him (S11)</li>
             <li>Soft-hearted under pressure: heals where the mission called for a kill</li>
@@ -1263,7 +1263,7 @@
         </div>
 
         <div class="bio-card">
-          <div class="bio-head"><h3>Alera</h3></div>
+          <div class="bio-head"><h3>Alera</h3><span class="bio-count" data-tally="Alera"></span></div>
           <ul>
             <li>Shares her body with a bonded half-god/demigod &mdash; the two now share the same body, though it can partially separate and act on its own, Jojo's-stand style (S16)</li>
             <li>The half-god blew up the food stalls at the druid/elf games while trying to gather intel (S16); may get his own bio card once more is known about him</li>
@@ -1483,21 +1483,29 @@
 <script>
 (function(){
   var DEFAULTS = [
+    { key: 'Nathan', count: 23 },
+    { key: 'Asakura', count: 0 },
+    { key: 'Moss', count: 1 },
+    { key: 'Bingus', count: 0 },
+    { key: 'Alera', count: 3 },
     { key: 'Surina', count: 2 },
-    { key: 'Gorax', count: 100 },
-    { key: 'Nathan', count: 23 }
+    { key: 'Gorax', count: 100 }
   ];
   var STORAGE_KEY = 'these-hands-killcount-v1';
 
   function loadTally(){
+    var saved = [];
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         var parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.length) return parsed;
+        if (Array.isArray(parsed)) saved = parsed;
       }
     } catch(e){}
-    return DEFAULTS.map(function(d){ return { key: d.key, count: d.count }; });
+    return DEFAULTS.map(function(d){
+      var match = saved.filter(function(s){ return s.key === d.key; })[0];
+      return { key: d.key, count: match ? match.count : d.count };
+    });
   }
   function saveTally(data){
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e){}
