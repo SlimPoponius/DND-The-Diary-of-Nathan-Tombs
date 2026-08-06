@@ -132,6 +132,7 @@
 
   /* ---------- Stat strip ---------- */
   .stat-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+  .currency-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(52px, 1fr)); gap: 8px; margin-bottom: 10px; }
   .stat-box { border: 1px solid var(--rule); border-radius: 4px; padding: 8px; text-align: center; background: var(--surface-raised); }
   .stat-box label { display: block; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 4px; }
   .stat-box input { width: 100%; text-align: center; font-family: var(--mono); font-size: 0.95rem; }
@@ -290,6 +291,18 @@
       <p class="api-note">Kill count reads/writes the same tracker as the Campaign Ledger's scoreboard &mdash; local to this browser, not included in GitHub sync.</p>
     </div>
 
+    <div class="card">
+      <h2>Currency</h2>
+      <div class="currency-grid">
+        <div class="stat-box"><label>CP</label><input type="number" min="0" data-path="currency.cp" data-recompute="currency"></div>
+        <div class="stat-box"><label>SP</label><input type="number" min="0" data-path="currency.sp" data-recompute="currency"></div>
+        <div class="stat-box"><label>EP</label><input type="number" min="0" data-path="currency.ep" data-recompute="currency"></div>
+        <div class="stat-box"><label>GP</label><input type="number" min="0" data-path="currency.gp" data-recompute="currency"></div>
+        <div class="stat-box"><label>PP</label><input type="number" min="0" data-path="currency.pp" data-recompute="currency"></div>
+      </div>
+      <p class="api-note">Total value: <span id="currencyTotal" style="color:var(--brass); font-family:var(--mono); font-size:0.85rem;">0</span> gp</p>
+    </div>
+
     <div class="card col-span-2">
       <h2>Attacks &amp; Cantrips</h2>
       <table class="attack-table">
@@ -379,6 +392,7 @@
       perception: false, performance: false, persuasion: false, religion: false, sleightOfHand: false, stealth: true, survival: false },
     combat: { ac: '', speed: 40, hitDice: '4d8', hpMax: '', hpCurrent: '', hpTemp: '', deathSuccess: 0, deathFail: 0 },
     resources: { kiCurrent: 4, kiMax: 4, martialArtsDie: '1d4' },
+    currency: { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 },
     attacks: [
       { name: 'Umbral Gauntlets (Unarmed Strike)', bonus: '', damage: '1d4 + DEX', notes: 'Forged from umbral iron (S6–7); upgraded via a favor for the White Mask Cult (S11)' }
     ],
@@ -462,10 +476,18 @@
       persistLocal();
       var recompute = el.getAttribute('data-recompute');
       if (recompute === 'level') { renderDerived(); }
+      if (recompute === 'currency') { renderCurrencyTotal(); }
       updateStatusHint();
     });
   }
   document.querySelectorAll('[data-path]').forEach(bindPathField);
+
+  function renderCurrencyTotal() {
+    var c = state.currency;
+    var total = (Number(c.cp) || 0) * 0.01 + (Number(c.sp) || 0) * 0.1 + (Number(c.ep) || 0) * 0.5 +
+      (Number(c.gp) || 0) * 1 + (Number(c.pp) || 0) * 10;
+    document.getElementById('currencyTotal').textContent = Math.round(total * 100) / 100;
+  }
 
   function renderIdentityAndCombat() {
     document.querySelectorAll('[data-path]').forEach(setPathFieldValue);
@@ -703,6 +725,7 @@
     renderResources();
     renderAttacks();
     renderKillcount();
+    renderCurrencyTotal();
     document.getElementById('lookupLevel').value = state.identity.level;
   }
 
