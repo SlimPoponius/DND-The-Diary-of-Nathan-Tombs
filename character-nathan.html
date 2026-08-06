@@ -1,0 +1,892 @@
+<title>Nathan — Character Sheet</title>
+<style>
+  :root {
+    --bg: #14110d;
+    --surface: #1d1812;
+    --surface-raised: #241d15;
+    --rule: #3a3226;
+    --rule-soft: #2a241b;
+    --text: #ece3d2;
+    --text-dim: #b5a891;
+    --text-faint: #7d715c;
+    --brass: #d1a52e;
+    --brass-dim: #8f7527;
+    --verdigris: #6ea08c;
+    --verdigris-dim: #3f5c50;
+    --brick: #c1543d;
+    --brick-dim: #6b2f22;
+    --focus: #e8c85a;
+
+    --serif: ui-serif, Georgia, "Iowan Old Style", "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, "Cascadia Mono", "SF Mono", Consolas, "Liberation Mono", monospace;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #e6dfc9; --surface: #f1ebd8; --surface-raised: #f8f3e4;
+      --rule: #cdc2a0; --rule-soft: #ddd3b5; --text: #211b13; --text-dim: #4d4432; --text-faint: #857a5f;
+      --brass: #8a6a16; --brass-dim: #b89639; --verdigris: #3f6b57; --verdigris-dim: #7fa694;
+      --brick: #a3402c; --brick-dim: #d98d78; --focus: #7a5c10;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14110d; --surface: #1d1812; --surface-raised: #241d15;
+    --rule: #3a3226; --rule-soft: #2a241b; --text: #ece3d2; --text-dim: #b5a891; --text-faint: #7d715c;
+    --brass: #d1a52e; --brass-dim: #8f7527; --verdigris: #6ea08c; --verdigris-dim: #3f5c50;
+    --brick: #c1543d; --brick-dim: #6b2f22; --focus: #e8c85a;
+  }
+  :root[data-theme="light"] {
+    --bg: #e6dfc9; --surface: #f1ebd8; --surface-raised: #f8f3e4;
+    --rule: #cdc2a0; --rule-soft: #ddd3b5; --text: #211b13; --text-dim: #4d4432; --text-faint: #857a5f;
+    --brass: #8a6a16; --brass-dim: #b89639; --verdigris: #3f6b57; --verdigris-dim: #7fa694;
+    --brick: #a3402c; --brick-dim: #d98d78; --focus: #7a5c10;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+  body {
+    background-image:
+      radial-gradient(ellipse 900px 500px at 15% -10%, color-mix(in srgb, var(--brass) 7%, transparent), transparent),
+      radial-gradient(ellipse 700px 500px at 100% 20%, color-mix(in srgb, var(--verdigris) 6%, transparent), transparent);
+  }
+  a { color: var(--brass); }
+  button { font: inherit; }
+  input, textarea, select {
+    font-family: inherit;
+    color: var(--text);
+    background: var(--surface-raised);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 6px 8px;
+  }
+  input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+  textarea { resize: vertical; font-size: 0.9rem; line-height: 1.55; width: 100%; }
+
+  .page { max-width: 1180px; margin: 0 auto; padding: clamp(20px, 4vw, 48px); }
+
+  .masthead { border-bottom: 3px double var(--rule); padding-bottom: 18px; margin-bottom: 22px; }
+  .masthead .back-link {
+    font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--verdigris); text-decoration: none;
+  }
+  .masthead .back-link:hover { text-decoration: underline; }
+  .masthead h1 {
+    font-family: var(--serif); font-weight: 600; font-size: clamp(1.9rem, 4.5vw, 2.9rem);
+    margin: 8px 0 4px; letter-spacing: -0.01em; text-wrap: balance;
+  }
+  .masthead h1 em { font-style: italic; color: var(--brass); }
+  .identity-line { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: baseline; margin-top: 6px; }
+  .identity-field { display: flex; align-items: baseline; gap: 6px; }
+  .identity-field label { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-faint); }
+  .identity-field input { font-family: var(--serif); font-size: 1rem; width: 9em; }
+  .identity-field input.narrow { width: 4.5em; }
+
+  /* ---------- Sync bar ---------- */
+  .sync-bar {
+    display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center;
+    margin-top: 16px; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 4px; background: var(--surface);
+  }
+  .sync-status { font-family: var(--mono); font-size: 0.74rem; color: var(--text-faint); flex: 1; min-width: 160px; }
+  .btn {
+    font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.02em; white-space: nowrap;
+    padding: 8px 13px; border: 1px solid var(--rule); background: var(--surface-raised); color: var(--text-dim);
+    border-radius: 3px; cursor: pointer;
+  }
+  .btn:hover { border-color: var(--brass); color: var(--brass); }
+  .btn.primary { border-color: var(--verdigris-dim); color: var(--verdigris); }
+  .btn.primary:hover { border-color: var(--verdigris); }
+  .btn.small { padding: 5px 9px; font-size: 0.68rem; }
+  details.sync-settings { width: 100%; margin-top: 4px; }
+  details.sync-settings summary { cursor: pointer; font-family: var(--mono); font-size: 0.72rem; color: var(--text-faint); list-style: none; }
+  details.sync-settings summary::-webkit-details-marker { display: none; }
+  details.sync-settings summary:before { content: "▸ "; }
+  details.sync-settings[open] summary:before { content: "▾ "; }
+  .sync-settings-body { padding: 10px 2px 2px; font-size: 0.82rem; color: var(--text-dim); line-height: 1.6; }
+  .sync-settings-body input[type="password"] { width: 100%; max-width: 420px; font-family: var(--mono); font-size: 0.8rem; }
+  .sync-settings-body .row { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; align-items: center; }
+
+  /* ---------- Grid & cards ---------- */
+  .sheet-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; }
+  @media (max-width: 980px) { .sheet-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 680px) { .sheet-grid { grid-template-columns: 1fr; } }
+  .card { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 14px 16px 16px; margin-bottom: 16px; }
+  .card h2 {
+    font-family: var(--serif); font-size: 1.05rem; font-weight: 600; margin: 0 0 12px;
+    padding-bottom: 8px; border-bottom: 1px solid var(--rule-soft);
+  }
+  .card h2 .hint { font-family: var(--sans); font-size: 0.72rem; font-weight: 400; color: var(--text-faint); display: block; margin-top: 3px; }
+  .col-span-2 { grid-column: span 2; }
+  @media (max-width: 980px) { .col-span-2 { grid-column: span 2; } }
+  @media (max-width: 680px) { .col-span-2 { grid-column: span 1; } }
+  .col-span-3 { grid-column: 1 / -1; }
+
+  /* ---------- Ability scores ---------- */
+  .ability-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .ability-box { border: 1px solid var(--rule); border-radius: 4px; padding: 8px; text-align: center; background: var(--surface-raised); }
+  .ability-box label { display: block; font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 4px; }
+  .ability-box input { width: 100%; text-align: center; font-family: var(--mono); font-size: 1rem; }
+  .ability-box .mod { display: block; margin-top: 4px; font-family: var(--serif); font-size: 1.15rem; color: var(--brass); }
+
+  /* ---------- Stat strip ---------- */
+  .stat-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+  .stat-box { border: 1px solid var(--rule); border-radius: 4px; padding: 8px; text-align: center; background: var(--surface-raised); }
+  .stat-box label { display: block; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 4px; }
+  .stat-box input { width: 100%; text-align: center; font-family: var(--mono); font-size: 0.95rem; }
+  .stat-box .readout { font-family: var(--serif); font-size: 1.2rem; color: var(--brass); }
+  .hp-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+  .hp-row .stat-box input { font-size: 1rem; }
+  .death-saves { display: flex; gap: 14px; justify-content: center; margin-top: 6px; font-family: var(--mono); font-size: 0.68rem; color: var(--text-faint); }
+  .death-saves .grp { display: flex; align-items: center; gap: 4px; }
+  .death-dot { width: 12px; height: 12px; border-radius: 50%; border: 1px solid var(--rule); cursor: pointer; background: var(--surface); }
+  .death-dot.success.on { background: var(--verdigris); border-color: var(--verdigris); }
+  .death-dot.fail.on { background: var(--brick); border-color: var(--brick); }
+
+  /* ---------- Saves & skills ---------- */
+  .row-list { list-style: none; margin: 0; padding: 0; }
+  .save-row, .skill-row {
+    display: grid; grid-template-columns: 20px 1fr auto; gap: 8px; align-items: center;
+    padding: 5px 2px; border-bottom: 1px solid var(--rule-soft); font-size: 0.86rem;
+  }
+  .save-row:last-child, .skill-row:last-child { border-bottom: none; }
+  .row-list input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--verdigris); cursor: pointer; }
+  .row-name { color: var(--text); }
+  .row-name .ability-tag { font-family: var(--mono); font-size: 0.65rem; color: var(--text-faint); margin-left: 4px; }
+  .row-total { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--brass); min-width: 2.6ch; text-align: right; }
+
+  /* ---------- Resources ---------- */
+  .resource-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 2px; border-bottom: 1px solid var(--rule-soft); }
+  .resource-row:last-child { border-bottom: none; }
+  .resource-name { font-size: 0.9rem; }
+  .resource-controls { display: flex; align-items: center; gap: 6px; }
+  .resource-controls input[type="text"] { width: 4.5em; text-align: center; font-family: var(--mono); }
+  .stepper { display: flex; gap: 2px; }
+  .stepper button {
+    width: 24px; height: 24px; border: 1px solid var(--rule); background: var(--surface-raised);
+    color: var(--text-dim); font-family: var(--mono); font-size: 0.9rem; line-height: 1; cursor: pointer; border-radius: 2px;
+  }
+  .stepper button:hover { border-color: var(--brass); color: var(--brass); }
+  .resource-count { font-family: var(--mono); font-variant-numeric: tabular-nums; min-width: 3.5ch; text-align: center; color: var(--brick); }
+
+  /* ---------- Attacks table ---------- */
+  .attack-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  .attack-table th { text-align: left; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-faint); padding: 4px 6px; border-bottom: 1px solid var(--rule); }
+  .attack-table td { padding: 4px 6px; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+  .attack-table input { width: 100%; font-size: 0.82rem; }
+  .attack-table .col-name { width: 34%; }
+  .attack-table .col-bonus { width: 12%; }
+  .attack-table .col-dmg { width: 22%; }
+  .attack-table .col-x { width: 24px; text-align: center; }
+  .remove-row { background: none; border: none; color: var(--text-faint); cursor: pointer; font-size: 0.9rem; }
+  .remove-row:hover { color: var(--brick); }
+
+  /* ---------- Class reference panel ---------- */
+  .lookup-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+  .lookup-row select, .lookup-row input { font-family: var(--mono); font-size: 0.82rem; }
+  .lookup-results { font-size: 0.87rem; line-height: 1.6; }
+  .lookup-results .badge-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .lookup-badge {
+    font-family: var(--mono); font-size: 0.7rem; padding: 3px 9px; border-radius: 20px;
+    border: 1px solid var(--brass-dim); color: var(--brass); background: color-mix(in srgb, var(--brass) 10%, transparent);
+  }
+  .lookup-feature { margin-bottom: 10px; }
+  .lookup-feature h3 { font-family: var(--serif); font-size: 0.95rem; margin: 0 0 3px; }
+  .lookup-feature p { margin: 0 0 4px; color: var(--text-dim); }
+  .lookup-status { font-family: var(--mono); font-size: 0.78rem; color: var(--text-faint); }
+  .api-note { margin-top: 10px; font-size: 0.76rem; color: var(--text-faint); line-height: 1.5; }
+
+  .kill-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <a class="back-link" href="index.html">&larr; Campaign Ledger</a>
+    <h1>Nathan <em>&mdash; Character Sheet</em></h1>
+    <div class="identity-line">
+      <div class="identity-field"><label for="f-race">Race</label><input id="f-race" data-path="identity.race" placeholder="&mdash;"></div>
+      <div class="identity-field"><label for="f-class">Class</label><input id="f-class" data-path="identity.class"></div>
+      <div class="identity-field"><label for="f-subclass">Subclass</label><input id="f-subclass" data-path="identity.subclass"></div>
+      <div class="identity-field"><label for="f-level">Level</label><input id="f-level" class="narrow" type="number" min="1" max="20" data-path="identity.level" data-recompute="level"></div>
+      <div class="identity-field"><label for="f-background">Background</label><input id="f-background" data-path="identity.background" placeholder="&mdash;"></div>
+      <div class="identity-field"><label for="f-alignment">Alignment</label><input id="f-alignment" data-path="identity.alignment" placeholder="&mdash;"></div>
+    </div>
+
+    <div class="sync-bar">
+      <span class="sync-status" id="syncStatus">Loading…</span>
+      <button class="btn primary" id="pushBtn">Sync to GitHub</button>
+      <button class="btn" id="pullBtn">Load from GitHub</button>
+      <details class="sync-settings">
+        <summary>Sync settings</summary>
+        <div class="sync-settings-body">
+          Everything you type already autosaves to this browser. "Sync to GitHub" additionally commits it to
+          <b>character-nathan.json</b> in the DND-The-Diary-of-Nathan-Tombs repo, so it's backed up and available on other devices.
+          <br><br>
+          To enable it, paste a GitHub token below. Use a <b>fine-grained personal access token</b>
+          scoped to just this one repository with <b>Contents: Read and write</b> permission &mdash; nothing broader.
+          It's stored only in this browser's local storage and is never written into the saved file itself.
+          <div class="row">
+            <input type="password" id="tokenInput" placeholder="github_pat_…" autocomplete="off">
+            <button class="btn small" id="saveTokenBtn">Save token</button>
+            <button class="btn small" id="clearTokenBtn">Clear token</button>
+          </div>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <div class="sheet-grid">
+
+    <div class="card">
+      <h2>Ability Scores</h2>
+      <div class="ability-grid" id="abilityGrid"></div>
+    </div>
+
+    <div class="card">
+      <h2>Combat Stats</h2>
+      <div class="stat-strip">
+        <div class="stat-box"><label>AC</label><input type="number" data-path="combat.ac"></div>
+        <div class="stat-box"><label>Initiative</label><div class="readout" id="initReadout">+0</div></div>
+        <div class="stat-box"><label>Speed</label><input type="number" data-path="combat.speed"></div>
+      </div>
+      <div class="stat-strip">
+        <div class="stat-box"><label>Prof. Bonus</label><div class="readout" id="profReadout">+2</div></div>
+        <div class="stat-box"><label>Hit Dice</label><input type="text" data-path="combat.hitDice"></div>
+        <div class="stat-box"><label>Passive Perc.</label><div class="readout" id="passivePerception">10</div></div>
+      </div>
+      <div class="hp-row">
+        <div class="stat-box"><label>HP Max</label><input type="number" data-path="combat.hpMax"></div>
+        <div class="stat-box"><label>HP Current</label><input type="number" data-path="combat.hpCurrent"></div>
+        <div class="stat-box"><label>Temp HP</label><input type="number" data-path="combat.hpTemp"></div>
+      </div>
+      <div class="death-saves">
+        <div class="grp">Success <span id="dsSuccess"></span></div>
+        <div class="grp">Fail <span id="dsFail"></span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Saving Throws</h2>
+      <ul class="row-list" id="savesList"></ul>
+    </div>
+
+    <div class="card">
+      <h2>Skills</h2>
+      <ul class="row-list" id="skillsList"></ul>
+    </div>
+
+    <div class="card">
+      <h2>Resources</h2>
+      <div id="resourceList"></div>
+      <div class="kill-row" style="margin-top:10px; padding-top:10px; border-top:1px solid var(--rule-soft);">
+        <span class="resource-name">Kills (this browser)</span>
+        <div class="resource-controls">
+          <div class="stepper"><button id="killDec">&minus;</button><button id="killInc">+</button></div>
+          <span class="resource-count" id="killCount">0</span>
+        </div>
+      </div>
+      <p class="api-note">Kill count reads/writes the same tracker as the Campaign Ledger's scoreboard &mdash; local to this browser, not included in GitHub sync.</p>
+    </div>
+
+    <div class="card col-span-2">
+      <h2>Attacks &amp; Cantrips</h2>
+      <table class="attack-table">
+        <thead><tr><th class="col-name">Name</th><th class="col-bonus">Bonus</th><th class="col-dmg">Damage</th><th>Notes</th><th class="col-x"></th></tr></thead>
+        <tbody id="attackBody"></tbody>
+      </table>
+      <button class="btn small" id="addAttackBtn" style="margin-top:8px;">+ Add row</button>
+    </div>
+
+    <div class="card">
+      <h2>Equipment</h2>
+      <textarea id="equipmentText" rows="10" data-path="equipment"></textarea>
+    </div>
+
+    <div class="card col-span-2">
+      <h2>Features &amp; Traits</h2>
+      <textarea id="featuresText" rows="8" data-path="features"></textarea>
+    </div>
+
+    <div class="card">
+      <h2>Notes &amp; Backstory</h2>
+      <textarea id="notesText" rows="8" data-path="notes"></textarea>
+    </div>
+
+    <div class="card col-span-3">
+      <h2>Class Reference <span class="hint">Live lookup from the D&amp;D 5e SRD API &mdash; core class features by level. Subclass options from splatbooks (like Way of Shadow) aren't part of the open SRD, so track those above under Features &amp; Traits.</span></h2>
+      <div class="lookup-row">
+        <select id="lookupClass"></select>
+        <input type="number" id="lookupLevel" min="1" max="20" style="width:4.5em;">
+        <button class="btn primary small" id="lookupBtn">Look up</button>
+        <span class="lookup-status" id="lookupStatus"></span>
+      </div>
+      <div class="lookup-results" id="lookupResults"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  var REPO_OWNER = 'SlimPoponius';
+  var REPO_NAME = 'DND-The-Diary-of-Nathan-Tombs';
+  var FILE_PATH = 'character-nathan.json';
+  var API_URL = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + FILE_PATH;
+  var RAW_URL = 'https://raw.githubusercontent.com/' + REPO_OWNER + '/' + REPO_NAME + '/main/' + FILE_PATH;
+
+  var LOCAL_KEY = 'these-hands-character-nathan-v1';
+  var TOKEN_KEY = 'these-hands-gh-token';
+  var LAST_SYNC_KEY = 'these-hands-character-nathan-last-sync';
+  var KILLCOUNT_KEY = 'these-hands-killcount-v1';
+
+  var ABILITIES = [
+    { key: 'str', label: 'Strength' },
+    { key: 'dex', label: 'Dexterity' },
+    { key: 'con', label: 'Constitution' },
+    { key: 'int', label: 'Intelligence' },
+    { key: 'wis', label: 'Wisdom' },
+    { key: 'cha', label: 'Charisma' }
+  ];
+  var SKILLS = [
+    { key: 'acrobatics', label: 'Acrobatics', ability: 'dex' },
+    { key: 'animalHandling', label: 'Animal Handling', ability: 'wis' },
+    { key: 'arcana', label: 'Arcana', ability: 'int' },
+    { key: 'athletics', label: 'Athletics', ability: 'str' },
+    { key: 'deception', label: 'Deception', ability: 'cha' },
+    { key: 'history', label: 'History', ability: 'int' },
+    { key: 'insight', label: 'Insight', ability: 'wis' },
+    { key: 'intimidation', label: 'Intimidation', ability: 'cha' },
+    { key: 'investigation', label: 'Investigation', ability: 'int' },
+    { key: 'medicine', label: 'Medicine', ability: 'wis' },
+    { key: 'nature', label: 'Nature', ability: 'int' },
+    { key: 'perception', label: 'Perception', ability: 'wis' },
+    { key: 'performance', label: 'Performance', ability: 'cha' },
+    { key: 'persuasion', label: 'Persuasion', ability: 'cha' },
+    { key: 'religion', label: 'Religion', ability: 'int' },
+    { key: 'sleightOfHand', label: 'Sleight of Hand', ability: 'dex' },
+    { key: 'stealth', label: 'Stealth', ability: 'dex' },
+    { key: 'survival', label: 'Survival', ability: 'wis' }
+  ];
+
+  var DEFAULT_STATE = {
+    identity: { race: '', class: 'Monk', subclass: 'Way of Shadow', level: 4, background: '', alignment: '' },
+    abilities: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
+    saveProf: { str: true, dex: true, con: false, int: false, wis: false, cha: false },
+    skillProf: { acrobatics: false, animalHandling: false, arcana: false, athletics: false, deception: false,
+      history: false, insight: false, intimidation: false, investigation: false, medicine: false, nature: false,
+      perception: false, performance: false, persuasion: false, religion: false, sleightOfHand: false, stealth: true, survival: false },
+    combat: { ac: '', speed: 40, hitDice: '4d8', hpMax: '', hpCurrent: '', hpTemp: '', deathSuccess: 0, deathFail: 0 },
+    resources: { kiCurrent: 4, kiMax: 4, martialArtsDie: '1d4' },
+    attacks: [
+      { name: 'Umbral Gauntlets (Unarmed Strike)', bonus: '', damage: '1d4 + DEX', notes: 'Forged from umbral iron (S6–7); upgraded via a favor for the White Mask Cult (S11)' }
+    ],
+    equipment: 'Umbral Gauntlets — forged from umbral iron (S6–7), upgraded via a favor for the White Mask Cult (S11)\nCursed gloves — immense strength, at the cost of intelligence (S13)\nShadow gloves — command a shadow clone that mimics him 5 seconds later (S16)\nTemp adventurers’ guild ID (S3); Thieves’ Guild membership (S13)',
+    features: 'Core Monk features through level 4 (Unarmored Defense, Martial Arts, Ki, Flurry of Blows / Patient Defense / Step of the Wind, Unarmored Movement, Monastic Tradition, Deflect Missiles, Ability Score Improvement, Slow Fall) — use the Class Reference panel below for the current SRD text.\n\nWay of Shadow features (Shadow Arts, Shadow Step, etc.) aren’t in the open SRD — track those here manually as they come up.',
+    notes: 'Catchphrase: "These hands."\n\nPer Moss’s dream (S10): saw his mother murdered by a figure resembling his father as a kid.\n\nConfirmed (S10, via the pipe man’s orb): that father is Dr. Tombs. The rest of the party doesn’t know this yet.\n\nTold Bingus (S9): not interested in "the wish" — wants revenge.'
+  };
+
+  var state = loadInitial();
+
+  function deepClone(o) { return JSON.parse(JSON.stringify(o)); }
+
+  function loadInitial() {
+    try {
+      var raw = localStorage.getItem(LOCAL_KEY);
+      if (raw) return mergeDefaults(JSON.parse(raw));
+    } catch (e) {}
+    return deepClone(DEFAULT_STATE);
+  }
+
+  function mergeDefaults(loaded) {
+    var out = deepClone(DEFAULT_STATE);
+    Object.keys(out).forEach(function (k) {
+      if (loaded[k] === undefined) return;
+      if (typeof out[k] === 'object' && !Array.isArray(out[k]) && out[k] !== null) {
+        out[k] = Object.assign({}, out[k], loaded[k]);
+      } else {
+        out[k] = loaded[k];
+      }
+    });
+    return out;
+  }
+
+  function persistLocal() {
+    try { localStorage.setItem(LOCAL_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function getPath(obj, path) {
+    return path.split('.').reduce(function (o, k) { return o == null ? o : o[k]; }, obj);
+  }
+  function setPath(obj, path, value) {
+    var parts = path.split('.');
+    var target = obj;
+    for (var i = 0; i < parts.length - 1; i++) target = target[parts[i]];
+    target[parts[parts.length - 1]] = value;
+  }
+
+  function abilityMod(score) {
+    var n = Number(score);
+    if (!isFinite(n)) n = 10;
+    return Math.floor((n - 10) / 2);
+  }
+  function fmtMod(m) { return (m >= 0 ? '+' : '') + m; }
+  function profBonus(level) {
+    var n = Number(level);
+    if (!isFinite(n) || n < 1) n = 1;
+    return Math.floor((n - 1) / 4) + 2;
+  }
+  function skillTotal(skillDef) {
+    return abilityMod(state.abilities[skillDef.ability]) + (state.skillProf[skillDef.key] ? profBonus(state.identity.level) : 0);
+  }
+  function saveTotal(abilityKey) {
+    return abilityMod(state.abilities[abilityKey]) + (state.saveProf[abilityKey] ? profBonus(state.identity.level) : 0);
+  }
+
+  // ---------- Static field binding (identity, combat, textareas) ----------
+  // Listeners are attached exactly once at startup; fullRender() only ever
+  // re-applies values, so repeated renders (e.g. after "Load from GitHub")
+  // never stack up duplicate handlers on these long-lived inputs.
+  function setPathFieldValue(el) {
+    var path = el.getAttribute('data-path');
+    var val = getPath(state, path);
+    if (el.type === 'checkbox') el.checked = !!val;
+    else el.value = val === undefined || val === null ? '' : val;
+  }
+  function bindPathField(el) {
+    var path = el.getAttribute('data-path');
+    el.addEventListener('input', function () {
+      var v = el.type === 'number' ? (el.value === '' ? '' : Number(el.value)) : (el.type === 'checkbox' ? el.checked : el.value);
+      setPath(state, path, v);
+      persistLocal();
+      var recompute = el.getAttribute('data-recompute');
+      if (recompute === 'level') { renderDerived(); }
+      updateStatusHint();
+    });
+  }
+  document.querySelectorAll('[data-path]').forEach(bindPathField);
+
+  function renderIdentityAndCombat() {
+    document.querySelectorAll('[data-path]').forEach(setPathFieldValue);
+  }
+
+  // ---------- Abilities ----------
+  function renderAbilities() {
+    var grid = document.getElementById('abilityGrid');
+    grid.innerHTML = '';
+    ABILITIES.forEach(function (a) {
+      var box = document.createElement('div');
+      box.className = 'ability-box';
+      box.innerHTML =
+        '<label for="ab-' + a.key + '">' + a.label + '</label>' +
+        '<input id="ab-' + a.key + '" type="number" min="1" max="30">' +
+        '<span class="mod" id="abmod-' + a.key + '"></span>';
+      grid.appendChild(box);
+      var input = box.querySelector('input');
+      input.value = state.abilities[a.key];
+      input.addEventListener('input', function () {
+        state.abilities[a.key] = input.value === '' ? '' : Number(input.value);
+        persistLocal();
+        renderDerived();
+      });
+    });
+  }
+
+  // ---------- Saves & Skills ----------
+  function renderSaves() {
+    var list = document.getElementById('savesList');
+    list.innerHTML = '';
+    ABILITIES.forEach(function (a) {
+      var li = document.createElement('li');
+      li.className = 'save-row';
+      li.innerHTML =
+        '<input type="checkbox" id="save-' + a.key + '">' +
+        '<span class="row-name">' + a.label + '</span>' +
+        '<span class="row-total" id="savetotal-' + a.key + '"></span>';
+      list.appendChild(li);
+      var cb = li.querySelector('input');
+      cb.checked = !!state.saveProf[a.key];
+      cb.addEventListener('change', function () {
+        state.saveProf[a.key] = cb.checked;
+        persistLocal();
+        renderDerived();
+      });
+    });
+  }
+
+  function renderSkills() {
+    var list = document.getElementById('skillsList');
+    list.innerHTML = '';
+    SKILLS.forEach(function (s) {
+      var li = document.createElement('li');
+      li.className = 'skill-row';
+      li.innerHTML =
+        '<input type="checkbox" id="skill-' + s.key + '">' +
+        '<span class="row-name">' + s.label + '<span class="ability-tag">' + s.ability.toUpperCase() + '</span></span>' +
+        '<span class="row-total" id="skilltotal-' + s.key + '"></span>';
+      list.appendChild(li);
+      var cb = li.querySelector('input');
+      cb.checked = !!state.skillProf[s.key];
+      cb.addEventListener('change', function () {
+        state.skillProf[s.key] = cb.checked;
+        persistLocal();
+        renderDerived();
+      });
+    });
+  }
+
+  // ---------- Derived values (safe to re-run without losing input focus) ----------
+  function renderDerived() {
+    ABILITIES.forEach(function (a) {
+      var modEl = document.getElementById('abmod-' + a.key);
+      if (modEl) modEl.textContent = fmtMod(abilityMod(state.abilities[a.key]));
+      var saveEl = document.getElementById('savetotal-' + a.key);
+      if (saveEl) saveEl.textContent = fmtMod(saveTotal(a.key));
+    });
+    SKILLS.forEach(function (s) {
+      var el = document.getElementById('skilltotal-' + s.key);
+      if (el) el.textContent = fmtMod(skillTotal(s));
+    });
+    document.getElementById('profReadout').textContent = fmtMod(profBonus(state.identity.level));
+    document.getElementById('initReadout').textContent = fmtMod(abilityMod(state.abilities.dex));
+    var perceptionDef = SKILLS.filter(function (s) { return s.key === 'perception'; })[0];
+    document.getElementById('passivePerception').textContent = 10 + skillTotal(perceptionDef);
+  }
+
+  // ---------- Death saves ----------
+  function renderDeathSaves() {
+    var succEl = document.getElementById('dsSuccess');
+    var failEl = document.getElementById('dsFail');
+    succEl.innerHTML = ''; failEl.innerHTML = '';
+    for (var i = 0; i < 3; i++) {
+      (function (i) {
+        var dot = document.createElement('span');
+        dot.className = 'death-dot success' + (i < state.combat.deathSuccess ? ' on' : '');
+        dot.addEventListener('click', function () {
+          state.combat.deathSuccess = (state.combat.deathSuccess === i + 1) ? i : i + 1;
+          persistLocal(); renderDeathSaves();
+        });
+        succEl.appendChild(dot);
+      })(i);
+      (function (i) {
+        var dot = document.createElement('span');
+        dot.className = 'death-dot fail' + (i < state.combat.deathFail ? ' on' : '');
+        dot.addEventListener('click', function () {
+          state.combat.deathFail = (state.combat.deathFail === i + 1) ? i : i + 1;
+          persistLocal(); renderDeathSaves();
+        });
+        failEl.appendChild(dot);
+      })(i);
+    }
+  }
+
+  // ---------- Resources ----------
+  function renderResources() {
+    var wrap = document.getElementById('resourceList');
+    wrap.innerHTML =
+      '<div class="resource-row">' +
+        '<span class="resource-name">Ki Points</span>' +
+        '<div class="resource-controls">' +
+          '<div class="stepper"><button id="kiDec">&minus;</button><button id="kiInc">+</button></div>' +
+          '<span class="resource-count" id="kiCount"></span>' +
+          '<span style="color:var(--text-faint); font-family:var(--mono); font-size:0.72rem;">/ <input type="number" id="kiMax" style="width:3em; text-align:center;"></span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="resource-row">' +
+        '<span class="resource-name">Martial Arts Die</span>' +
+        '<div class="resource-controls"><input type="text" id="martialDie"></div>' +
+      '</div>' +
+      '<button class="btn small" id="refillBtn" style="margin-top:8px;">Refill (long rest)</button>';
+
+    var kiCount = document.getElementById('kiCount');
+    var kiMax = document.getElementById('kiMax');
+    function updateKi() {
+      kiCount.textContent = state.resources.kiCurrent;
+      kiMax.value = state.resources.kiMax;
+    }
+    updateKi();
+    document.getElementById('kiDec').addEventListener('click', function () {
+      state.resources.kiCurrent = Math.max(0, state.resources.kiCurrent - 1);
+      persistLocal(); updateKi();
+    });
+    document.getElementById('kiInc').addEventListener('click', function () {
+      state.resources.kiCurrent = Math.min(state.resources.kiMax, state.resources.kiCurrent + 1);
+      persistLocal(); updateKi();
+    });
+    kiMax.addEventListener('input', function () {
+      state.resources.kiMax = kiMax.value === '' ? 0 : Number(kiMax.value);
+      persistLocal();
+    });
+    document.getElementById('refillBtn').addEventListener('click', function () {
+      state.resources.kiCurrent = state.resources.kiMax;
+      persistLocal(); updateKi();
+    });
+    var martialDie = document.getElementById('martialDie');
+    martialDie.value = state.resources.martialArtsDie;
+    martialDie.addEventListener('input', function () {
+      state.resources.martialArtsDie = martialDie.value;
+      persistLocal();
+    });
+  }
+
+  // ---------- Kill count (shared with the main ledger) ----------
+  function loadKillcount() {
+    try {
+      var raw = localStorage.getItem(KILLCOUNT_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return null;
+  }
+  function saveKillcount(arr) {
+    try { localStorage.setItem(KILLCOUNT_KEY, JSON.stringify(arr)); } catch (e) {}
+  }
+  function renderKillcount() {
+    var arr = loadKillcount() || [{ key: 'Nathan', count: 23 }];
+    var row = arr.filter(function (r) { return r.key === 'Nathan'; })[0];
+    if (!row) { row = { key: 'Nathan', count: 0 }; arr.push(row); }
+    document.getElementById('killCount').textContent = row.count;
+    document.getElementById('killInc').onclick = function () {
+      var a = loadKillcount() || arr;
+      var r = a.filter(function (x) { return x.key === 'Nathan'; })[0];
+      if (r) { r.count++; saveKillcount(a); renderKillcount(); }
+    };
+    document.getElementById('killDec').onclick = function () {
+      var a = loadKillcount() || arr;
+      var r = a.filter(function (x) { return x.key === 'Nathan'; })[0];
+      if (r) { r.count = Math.max(0, r.count - 1); saveKillcount(a); renderKillcount(); }
+    };
+  }
+
+  // ---------- Attacks table ----------
+  function renderAttacks() {
+    var body = document.getElementById('attackBody');
+    body.innerHTML = '';
+    state.attacks.forEach(function (atk, idx) {
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td class="col-name"><input data-i="' + idx + '" data-f="name"></td>' +
+        '<td class="col-bonus"><input data-i="' + idx + '" data-f="bonus"></td>' +
+        '<td class="col-dmg"><input data-i="' + idx + '" data-f="damage"></td>' +
+        '<td><input data-i="' + idx + '" data-f="notes"></td>' +
+        '<td class="col-x"><button class="remove-row" data-i="' + idx + '" title="Remove">&times;</button></td>';
+      body.appendChild(tr);
+      tr.querySelectorAll('input').forEach(function (inp) {
+        var f = inp.getAttribute('data-f');
+        inp.value = atk[f] || '';
+        inp.addEventListener('input', function () {
+          state.attacks[idx][f] = inp.value;
+          persistLocal();
+        });
+      });
+      tr.querySelector('.remove-row').addEventListener('click', function () {
+        state.attacks.splice(idx, 1);
+        persistLocal();
+        renderAttacks();
+      });
+    });
+  }
+  document.getElementById('addAttackBtn').addEventListener('click', function () {
+    state.attacks.push({ name: '', bonus: '', damage: '', notes: '' });
+    persistLocal();
+    renderAttacks();
+  });
+
+  // ---------- Full render ----------
+  function fullRender() {
+    renderIdentityAndCombat();
+    renderAbilities();
+    renderSaves();
+    renderSkills();
+    renderDerived();
+    renderDeathSaves();
+    renderResources();
+    renderAttacks();
+    renderKillcount();
+    document.getElementById('lookupLevel').value = state.identity.level;
+  }
+
+  // ---------- GitHub sync ----------
+  function utf8ToBase64(str) { return btoa(unescape(encodeURIComponent(str))); }
+  function base64ToUtf8(str) { return decodeURIComponent(escape(atob(str))); }
+
+  var syncStatusEl = document.getElementById('syncStatus');
+  function updateStatusHint() {
+    var last = localStorage.getItem(LAST_SYNC_KEY);
+    syncStatusEl.textContent = 'Saved to this browser · ' + (last ? 'last synced ' + new Date(last).toLocaleString() : 'never synced to GitHub');
+  }
+
+  function getToken() { return localStorage.getItem(TOKEN_KEY) || ''; }
+
+  document.getElementById('saveTokenBtn').addEventListener('click', function () {
+    var v = document.getElementById('tokenInput').value.trim();
+    if (!v) return;
+    localStorage.setItem(TOKEN_KEY, v);
+    document.getElementById('tokenInput').value = '';
+    document.getElementById('tokenInput').placeholder = 'Token saved ✓';
+  });
+  document.getElementById('clearTokenBtn').addEventListener('click', function () {
+    localStorage.removeItem(TOKEN_KEY);
+    document.getElementById('tokenInput').placeholder = 'github_pat_…';
+  });
+
+  document.getElementById('pushBtn').addEventListener('click', function () {
+    var token = getToken();
+    if (!token) { syncStatusEl.textContent = 'Add a GitHub token in Sync settings first.'; return; }
+    syncStatusEl.textContent = 'Syncing to GitHub…';
+    fetch(API_URL, { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' } })
+      .then(function (res) {
+        if (res.status === 200) return res.json().then(function (j) { return j.sha; });
+        if (res.status === 404) return null;
+        throw new Error('GitHub returned ' + res.status + ' while checking the existing file');
+      })
+      .then(function (sha) {
+        var body = { message: "Update Nathan's character sheet", content: utf8ToBase64(JSON.stringify(state, null, 2)), branch: 'main' };
+        if (sha) body.sha = sha;
+        return fetch(API_URL, {
+          method: 'PUT',
+          headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+      })
+      .then(function (res) {
+        if (!res.ok) return res.json().catch(function () { return {}; }).then(function (j) { throw new Error(res.status + ' ' + (j.message || 'push failed')); });
+        localStorage.setItem(LAST_SYNC_KEY, new Date().toISOString());
+        updateStatusHint();
+      })
+      .catch(function (e) {
+        syncStatusEl.textContent = 'Sync failed: ' + e.message;
+      });
+  });
+
+  document.getElementById('pullBtn').addEventListener('click', function () {
+    if (!confirm("This replaces everything on this page with the last version saved on GitHub. Continue?")) return;
+    syncStatusEl.textContent = 'Loading from GitHub…';
+    fetch(RAW_URL + '?t=' + Date.now())
+      .then(function (res) {
+        if (!res.ok) throw new Error('no saved file on GitHub yet (status ' + res.status + ')');
+        return res.json();
+      })
+      .then(function (json) {
+        state = mergeDefaults(json);
+        persistLocal();
+        fullRender();
+        syncStatusEl.textContent = 'Loaded latest from GitHub.';
+      })
+      .catch(function (e) {
+        syncStatusEl.textContent = 'Load failed: ' + e.message;
+      });
+  });
+
+  // ---------- Class reference (D&D 5e SRD API) ----------
+  var API_BASE = 'https://www.dnd5eapi.co/api/2014';
+  var featureCache = {};
+
+  function loadClassList() {
+    var sel = document.getElementById('lookupClass');
+    fetch(API_BASE + '/classes')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        sel.innerHTML = '';
+        data.results.forEach(function (c) {
+          var opt = document.createElement('option');
+          opt.value = c.index;
+          opt.textContent = c.name;
+          sel.appendChild(opt);
+        });
+        var current = (state.identity.class || '').toLowerCase();
+        var match = data.results.filter(function (c) { return c.name.toLowerCase() === current; })[0];
+        if (match) sel.value = match.index;
+      })
+      .catch(function () {
+        document.getElementById('lookupStatus').textContent = 'Could not reach the SRD API.';
+      });
+  }
+
+  function prettifyKey(k) {
+    return k.replace(/_/g, ' ').replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+  }
+  function prettifyClassSpecific(obj) {
+    var parts = [];
+    Object.keys(obj).forEach(function (k) {
+      var v = obj[k];
+      if (v && typeof v === 'object' && 'dice_count' in v) {
+        parts.push(prettifyKey(k) + ': ' + v.dice_count + 'd' + v.dice_value);
+      } else if (typeof v === 'number') {
+        parts.push(prettifyKey(k) + ': ' + v);
+      } else if (typeof v === 'string') {
+        parts.push(prettifyKey(k) + ': ' + v);
+      }
+    });
+    return parts;
+  }
+
+  document.getElementById('lookupBtn').addEventListener('click', function () {
+    var cls = document.getElementById('lookupClass').value;
+    var lvl = document.getElementById('lookupLevel').value || 1;
+    var statusEl = document.getElementById('lookupStatus');
+    var resultsEl = document.getElementById('lookupResults');
+    if (!cls) return;
+    statusEl.textContent = 'Looking up…';
+    resultsEl.innerHTML = '';
+    fetch(API_BASE + '/classes/' + cls + '/levels/' + lvl)
+      .then(function (r) {
+        if (!r.ok) throw new Error('no data for that class/level (status ' + r.status + ')');
+        return r.json();
+      })
+      .then(function (data) {
+        statusEl.textContent = '';
+        var badges = document.createElement('div');
+        badges.className = 'badge-row';
+        var badgeTexts = ['Proficiency Bonus: +' + data.prof_bonus];
+        if (data.class_specific) badgeTexts = badgeTexts.concat(prettifyClassSpecific(data.class_specific));
+        badgeTexts.forEach(function (t) {
+          var b = document.createElement('span');
+          b.className = 'lookup-badge';
+          b.textContent = t;
+          badges.appendChild(b);
+        });
+        resultsEl.appendChild(badges);
+
+        if (!data.features || !data.features.length) {
+          var p = document.createElement('p');
+          p.textContent = 'No new features listed at this level in the SRD.';
+          resultsEl.appendChild(p);
+          return;
+        }
+
+        var fetches = data.features.map(function (f) {
+          if (featureCache[f.index]) return Promise.resolve(featureCache[f.index]);
+          return fetch(API_BASE + '/features/' + f.index)
+            .then(function (r) { return r.json(); })
+            .then(function (d) { featureCache[f.index] = d; return d; })
+            .catch(function () { return { name: f.name, desc: [] }; });
+        });
+        Promise.all(fetches).then(function (feats) {
+          feats.forEach(function (f) {
+            var block = document.createElement('div');
+            block.className = 'lookup-feature';
+            var descHtml = (f.desc || []).map(function (d) { return '<p>' + d + '</p>'; }).join('');
+            block.innerHTML = '<h3>' + f.name + '</h3>' + descHtml;
+            resultsEl.appendChild(block);
+          });
+        });
+      })
+      .catch(function (e) {
+        statusEl.textContent = 'Lookup failed: ' + e.message;
+      });
+  });
+
+  // ---------- Init ----------
+  fullRender();
+  updateStatusHint();
+  loadClassList();
+
+  // If no local save existed yet, try to seed from whatever's already on GitHub
+  if (!localStorage.getItem(LOCAL_KEY)) {
+    fetch(RAW_URL).then(function (r) { return r.ok ? r.json() : null; }).then(function (json) {
+      if (json) { state = mergeDefaults(json); persistLocal(); fullRender(); }
+    }).catch(function () {});
+  }
+})();
+</script>

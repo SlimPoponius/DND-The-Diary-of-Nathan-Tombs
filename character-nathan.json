@@ -1,0 +1,19 @@
+{
+  "identity": { "race": "", "class": "Monk", "subclass": "Way of Shadow", "level": 4, "background": "", "alignment": "" },
+  "abilities": { "str": 10, "dex": 10, "con": 10, "int": 10, "wis": 10, "cha": 10 },
+  "saveProf": { "str": true, "dex": true, "con": false, "int": false, "wis": false, "cha": false },
+  "skillProf": {
+    "acrobatics": false, "animalHandling": false, "arcana": false, "athletics": false, "deception": false,
+    "history": false, "insight": false, "intimidation": false, "investigation": false, "medicine": false,
+    "nature": false, "perception": false, "performance": false, "persuasion": false, "religion": false,
+    "sleightOfHand": false, "stealth": true, "survival": false
+  },
+  "combat": { "ac": "", "speed": 40, "hitDice": "4d8", "hpMax": "", "hpCurrent": "", "hpTemp": "", "deathSuccess": 0, "deathFail": 0 },
+  "resources": { "kiCurrent": 4, "kiMax": 4, "martialArtsDie": "1d4" },
+  "attacks": [
+    { "name": "Umbral Gauntlets (Unarmed Strike)", "bonus": "", "damage": "1d4 + DEX", "notes": "Forged from umbral iron (S6-7); upgraded via a favor for the White Mask Cult (S11)" }
+  ],
+  "equipment": "Umbral Gauntlets — forged from umbral iron (S6-7), upgraded via a favor for the White Mask Cult (S11)\nCursed gloves — immense strength, at the cost of intelligence (S13)\nShadow gloves — command a shadow clone that mimics him 5 seconds later (S16)\nTemp adventurers’ guild ID (S3); Thieves’ Guild membership (S13)",
+  "features": "Core Monk features through level 4 (Unarmored Defense, Martial Arts, Ki, Flurry of Blows / Patient Defense / Step of the Wind, Unarmored Movement, Monastic Tradition, Deflect Missiles, Ability Score Improvement, Slow Fall) — use the Class Reference panel below for the current SRD text.\n\nWay of Shadow features (Shadow Arts, Shadow Step, etc.) aren’t in the open SRD — track those here manually as they come up.",
+  "notes": "Catchphrase: \"These hands.\"\n\nPer Moss’s dream (S10): saw his mother murdered by a figure resembling his father as a kid.\n\nConfirmed (S10, via the pipe man’s orb): that father is Dr. Tombs. The rest of the party doesn’t know this yet.\n\nTold Bingus (S9): not interested in \"the wish\" — wants revenge."
+}
