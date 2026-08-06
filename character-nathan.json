@@ -1,17 +1,76 @@
 {
-  "identity": { "race": "", "class": "Monk", "subclass": "Way of Shadow", "level": 4, "background": "", "alignment": "" },
-  "abilities": { "str": 10, "dex": 10, "con": 10, "int": 10, "wis": 10, "cha": 10 },
-  "saveProf": { "str": true, "dex": true, "con": false, "int": false, "wis": false, "cha": false },
-  "skillProf": {
-    "acrobatics": false, "animalHandling": false, "arcana": false, "athletics": false, "deception": false,
-    "history": false, "insight": false, "intimidation": false, "investigation": false, "medicine": false,
-    "nature": false, "perception": false, "performance": false, "persuasion": false, "religion": false,
-    "sleightOfHand": false, "stealth": true, "survival": false
+  "identity": {
+    "race": "Human",
+    "class": "Monk",
+    "subclass": "Way of Shadow",
+    "level": 4,
+    "background": "Haunted One",
+    "alignment": "Neutral"
   },
-  "combat": { "ac": "", "speed": 40, "hitDice": "4d8", "hpMax": "", "hpCurrent": "", "hpTemp": "", "deathSuccess": 0, "deathFail": 0 },
-  "resources": { "kiCurrent": 4, "kiMax": 4, "martialArtsDie": "1d4" },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "saveProf": {
+    "str": true,
+    "dex": true,
+    "con": false,
+    "int": false,
+    "wis": false,
+    "cha": false
+  },
+  "skillProf": {
+    "acrobatics": false,
+    "animalHandling": false,
+    "arcana": false,
+    "athletics": false,
+    "deception": false,
+    "history": false,
+    "insight": false,
+    "intimidation": false,
+    "investigation": false,
+    "medicine": false,
+    "nature": false,
+    "perception": false,
+    "performance": false,
+    "persuasion": false,
+    "religion": false,
+    "sleightOfHand": false,
+    "stealth": true,
+    "survival": false
+  },
+  "combat": {
+    "ac": "",
+    "speed": 40,
+    "hitDice": "4d8",
+    "hpMax": "",
+    "hpCurrent": "",
+    "hpTemp": "",
+    "deathSuccess": 0,
+    "deathFail": 0
+  },
+  "resources": {
+    "kiCurrent": 4,
+    "kiMax": 4,
+    "martialArtsDie": "1d4"
+  },
   "attacks": [
-    { "name": "Umbral Gauntlets (Unarmed Strike)", "bonus": "", "damage": "1d4 + DEX", "notes": "Forged from umbral iron (S6-7); upgraded via a favor for the White Mask Cult (S11)" }
+    {
+      "name": "Umbral Gauntlets (Unarmed Strike)",
+      "bonus": "",
+      "damage": "1d4 + DEX",
+      "notes": "Forged from umbral iron (S6-7); upgraded via a favor for the White Mask Cult (S11)"
+    },
+    {
+      "name": "Cursed Gloves of Troll Strength",
+      "bonus": "",
+      "damage": "1d4 + STR",
+      "notes": "Obtained as a replacement for the shopkeep getting the umbral gloves stolen"
+    }
   ],
   "equipment": "Umbral Gauntlets — forged from umbral iron (S6-7), upgraded via a favor for the White Mask Cult (S11)\nCursed gloves — immense strength, at the cost of intelligence (S13)\nShadow gloves — command a shadow clone that mimics him 5 seconds later (S16)\nTemp adventurers’ guild ID (S3); Thieves’ Guild membership (S13)",
   "features": "Core Monk features through level 4 (Unarmored Defense, Martial Arts, Ki, Flurry of Blows / Patient Defense / Step of the Wind, Unarmored Movement, Monastic Tradition, Deflect Missiles, Ability Score Improvement, Slow Fall) — use the Class Reference panel below for the current SRD text.\n\nWay of Shadow features (Shadow Arts, Shadow Step, etc.) aren’t in the open SRD — track those here manually as they come up.",
