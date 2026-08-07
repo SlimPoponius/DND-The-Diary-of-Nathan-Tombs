@@ -48,7 +48,7 @@
     "speed": 40,
     "hitDice": "4d8",
     "hpMax": 32,
-    "hpCurrent": 29,
+    "hpCurrent": 24,
     "hpTemp": "",
     "deathSuccess": 0,
     "deathFail": 0
