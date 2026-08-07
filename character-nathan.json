@@ -8,12 +8,12 @@
     "alignment": "Neutral"
   },
   "abilities": {
-    "str": 10,
-    "dex": 10,
-    "con": 10,
-    "int": 10,
-    "wis": 10,
-    "cha": 10
+    "str": 13,
+    "dex": 20,
+    "con": 15,
+    "int": 13,
+    "wis": 15,
+    "cha": 13
   },
   "saveProf": {
     "str": true,
@@ -44,7 +44,7 @@
     "survival": false
   },
   "combat": {
-    "ac": "",
+    "ac": 16,
     "speed": 40,
     "hitDice": "4d8",
     "hpMax": "",
@@ -58,7 +58,13 @@
     "kiMax": 4,
     "martialArtsDie": "1d4"
   },
-  "currency": { "cp": 0, "sp": 0, "ep": 0, "gp": 0, "pp": 0 },
+  "currency": {
+    "cp": 0,
+    "sp": 0,
+    "ep": 0,
+    "gp": 0,
+    "pp": 0
+  },
   "attacks": [
     {
       "name": "Umbral Gauntlets (Unarmed Strike)",
