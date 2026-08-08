@@ -129,6 +129,16 @@
   .ability-box label { display: block; font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 4px; }
   .ability-box input { width: 100%; text-align: center; font-family: var(--mono); font-size: 1rem; }
   .ability-box .mod { display: block; margin-top: 4px; font-family: var(--serif); font-size: 1.15rem; color: var(--brass); }
+  .ab-base-row { display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--rule-soft); }
+  .ab-base-row input {
+    width: 2.6em; text-align: center; font-family: var(--mono); font-size: 0.7rem; padding: 2px 3px;
+    color: var(--text-faint); background: var(--surface); border-color: var(--rule-soft);
+  }
+  .ab-base-row .ab-restore {
+    font-family: var(--mono); font-size: 0.7rem; padding: 2px 5px; border: 1px solid var(--rule);
+    background: var(--surface); color: var(--text-faint); cursor: pointer; border-radius: 2px; line-height: 1;
+  }
+  .ab-base-row .ab-restore:hover { border-color: var(--brass); color: var(--brass); }
 
   /* ---------- Stat strip ---------- */
   .stat-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
@@ -241,7 +251,7 @@
   <div class="sheet-grid">
 
     <div class="card">
-      <h2>Ability Scores</h2>
+      <h2>Ability Scores <span class="hint">Small box below each score is its base value (before curses/items) &mdash; edit the main score when something changes it, and tap &#8630; to snap it back once the effect ends.</span></h2>
       <div class="ability-grid" id="abilityGrid"></div>
     </div>
 
@@ -386,6 +396,7 @@
   var DEFAULT_STATE = {
     identity: { race: '', class: 'Monk', subclass: 'Way of Shadow', level: 4, background: '', alignment: '' },
     abilities: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
+    abilitiesBase: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
     saveProf: { str: true, dex: true, con: false, int: false, wis: false, cha: false },
     skillProf: { acrobatics: false, animalHandling: false, arcana: false, athletics: false, deception: false,
       history: false, insight: false, intimidation: false, investigation: false, medicine: false, nature: false,
@@ -503,12 +514,30 @@
       box.innerHTML =
         '<label for="ab-' + a.key + '">' + a.label + '</label>' +
         '<input id="ab-' + a.key + '" type="number" min="1" max="30">' +
-        '<span class="mod" id="abmod-' + a.key + '"></span>';
+        '<span class="mod" id="abmod-' + a.key + '"></span>' +
+        '<div class="ab-base-row">' +
+          '<input id="abbase-' + a.key + '" type="number" min="1" max="30" title="Base score, before curses/items">' +
+          '<button class="ab-restore" id="abrestore-' + a.key + '" type="button" title="Restore score to base">&#8630;</button>' +
+        '</div>';
       grid.appendChild(box);
-      var input = box.querySelector('input');
+
+      var input = box.querySelector('#ab-' + a.key);
+      var baseInput = box.querySelector('#abbase-' + a.key);
       input.value = state.abilities[a.key];
+      baseInput.value = state.abilitiesBase[a.key];
+
       input.addEventListener('input', function () {
         state.abilities[a.key] = input.value === '' ? '' : Number(input.value);
+        persistLocal();
+        renderDerived();
+      });
+      baseInput.addEventListener('input', function () {
+        state.abilitiesBase[a.key] = baseInput.value === '' ? '' : Number(baseInput.value);
+        persistLocal();
+      });
+      box.querySelector('#abrestore-' + a.key).addEventListener('click', function () {
+        state.abilities[a.key] = state.abilitiesBase[a.key];
+        input.value = state.abilities[a.key];
         persistLocal();
         renderDerived();
       });

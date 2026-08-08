@@ -15,6 +15,14 @@
     "wis": 15,
     "cha": 13
   },
+  "abilitiesBase": {
+    "str": 13,
+    "dex": 20,
+    "con": 15,
+    "int": 13,
+    "wis": 15,
+    "cha": 13
+  },
   "saveProf": {
     "str": false,
     "dex": true,
