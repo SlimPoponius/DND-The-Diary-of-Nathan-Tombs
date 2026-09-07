@@ -159,10 +159,14 @@
   /* ---------- Saves & skills ---------- */
   .row-list { list-style: none; margin: 0; padding: 0; }
   .save-row, .skill-row {
-    display: grid; grid-template-columns: 20px 1fr auto; gap: 8px; align-items: center;
+    display: grid; grid-template-columns: 20px 1fr 2.6em auto; gap: 6px; align-items: center;
     padding: 5px 2px; border-bottom: 1px solid var(--rule-soft); font-size: 0.86rem;
   }
   .save-row:last-child, .skill-row:last-child { border-bottom: none; }
+  .row-misc {
+    width: 2.6em; text-align: center; font-family: var(--mono); font-size: 0.72rem; padding: 2px 3px;
+    color: var(--text-faint); background: var(--surface); border-color: var(--rule-soft);
+  }
   .row-list input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--verdigris); cursor: pointer; }
   .row-name { color: var(--text); }
   .row-name .ability-tag { font-family: var(--mono); font-size: 0.65rem; color: var(--text-faint); margin-left: 4px; }
@@ -287,12 +291,12 @@
     </div>
 
     <div class="card">
-      <h2>Saving Throws</h2>
+      <h2>Saving Throws <span class="hint">Small box is a misc bonus (feats, items, etc.) on top of ability + proficiency.</span></h2>
       <ul class="row-list" id="savesList"></ul>
     </div>
 
     <div class="card">
-      <h2>Skills</h2>
+      <h2>Skills <span class="hint">Same misc-bonus box as Saving Throws, per skill.</span></h2>
       <ul class="row-list" id="skillsList"></ul>
     </div>
 
@@ -406,9 +410,13 @@
     abilities: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
     abilitiesBase: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
     saveProf: { str: true, dex: true, con: false, int: false, wis: false, cha: false },
+    saveMisc: { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 },
     skillProf: { acrobatics: false, animalHandling: false, arcana: false, athletics: false, deception: false,
       history: false, insight: false, intimidation: false, investigation: false, medicine: false, nature: false,
       perception: false, performance: false, persuasion: false, religion: false, sleightOfHand: false, stealth: true, survival: false },
+    skillMisc: { acrobatics: 0, animalHandling: 0, arcana: 0, athletics: 0, deception: 0,
+      history: 0, insight: 0, intimidation: 0, investigation: 0, medicine: 0, nature: 0,
+      perception: 0, performance: 0, persuasion: 0, religion: 0, sleightOfHand: 0, stealth: 0, survival: 0 },
     combat: { ac: '', speed: 40, hitDice: '4d8', hpMax: '', hpCurrent: '', hpTemp: '', deathSuccess: 0, deathFail: 0, unarmoredDefense: true },
     resources: { kiCurrent: 4, kiMax: 4, martialArtsDie: '1d4' },
     currency: { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 },
@@ -471,10 +479,12 @@
     return Math.floor((n - 1) / 4) + 2;
   }
   function skillTotal(skillDef) {
-    return abilityMod(state.abilities[skillDef.ability]) + (state.skillProf[skillDef.key] ? profBonus(state.identity.level) : 0);
+    return abilityMod(state.abilities[skillDef.ability]) + (state.skillProf[skillDef.key] ? profBonus(state.identity.level) : 0) +
+      (Number(state.skillMisc[skillDef.key]) || 0);
   }
   function saveTotal(abilityKey) {
-    return abilityMod(state.abilities[abilityKey]) + (state.saveProf[abilityKey] ? profBonus(state.identity.level) : 0);
+    return abilityMod(state.abilities[abilityKey]) + (state.saveProf[abilityKey] ? profBonus(state.identity.level) : 0) +
+      (Number(state.saveMisc[abilityKey]) || 0);
   }
 
   // ---------- Static field binding (identity, combat, textareas) ----------
@@ -562,12 +572,20 @@
       li.innerHTML =
         '<input type="checkbox" id="save-' + a.key + '">' +
         '<span class="row-name">' + a.label + '</span>' +
+        '<input type="number" class="row-misc" id="savemisc-' + a.key + '" title="Misc bonus — feats, items, etc.">' +
         '<span class="row-total" id="savetotal-' + a.key + '"></span>';
       list.appendChild(li);
-      var cb = li.querySelector('input');
+      var cb = document.getElementById('save-' + a.key);
+      var miscInput = document.getElementById('savemisc-' + a.key);
       cb.checked = !!state.saveProf[a.key];
+      miscInput.value = state.saveMisc[a.key] || 0;
       cb.addEventListener('change', function () {
         state.saveProf[a.key] = cb.checked;
+        persistLocal();
+        renderDerived();
+      });
+      miscInput.addEventListener('input', function () {
+        state.saveMisc[a.key] = miscInput.value === '' ? 0 : Number(miscInput.value);
         persistLocal();
         renderDerived();
       });
@@ -583,12 +601,20 @@
       li.innerHTML =
         '<input type="checkbox" id="skill-' + s.key + '">' +
         '<span class="row-name">' + s.label + '<span class="ability-tag">' + s.ability.toUpperCase() + '</span></span>' +
+        '<input type="number" class="row-misc" id="skillmisc-' + s.key + '" title="Misc bonus — feats, items, etc.">' +
         '<span class="row-total" id="skilltotal-' + s.key + '"></span>';
       list.appendChild(li);
-      var cb = li.querySelector('input');
+      var cb = document.getElementById('skill-' + s.key);
+      var miscInput = document.getElementById('skillmisc-' + s.key);
       cb.checked = !!state.skillProf[s.key];
+      miscInput.value = state.skillMisc[s.key] || 0;
       cb.addEventListener('change', function () {
         state.skillProf[s.key] = cb.checked;
+        persistLocal();
+        renderDerived();
+      });
+      miscInput.addEventListener('input', function () {
+        state.skillMisc[s.key] = miscInput.value === '' ? 0 : Number(miscInput.value);
         persistLocal();
         renderDerived();
       });
