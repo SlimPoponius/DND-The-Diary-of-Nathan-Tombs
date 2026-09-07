@@ -59,7 +59,8 @@
     "hpCurrent": 24,
     "hpTemp": "",
     "deathSuccess": 0,
-    "deathFail": 0
+    "deathFail": 0,
+    "unarmoredDefense": true
   },
   "resources": {
     "kiCurrent": 4,
@@ -77,7 +78,7 @@
     {
       "name": "Umbral Gauntlets (Unarmed Strike)",
       "bonus": "",
-      "damage": "2d4",
+      "damage": "1d4 + DEX + proficiency",
       "notes": "Forged from umbral iron (S6-7); upgraded via a favor for the White Mask Cult (S11)"
     },
     {

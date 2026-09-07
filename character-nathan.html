@@ -146,6 +146,7 @@
   .stat-box { border: 1px solid var(--rule); border-radius: 4px; padding: 8px; text-align: center; background: var(--surface-raised); }
   .stat-box label { display: block; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 4px; }
   .stat-box input { width: 100%; text-align: center; font-family: var(--mono); font-size: 0.95rem; }
+  .stat-box input[readonly] { color: var(--brass); background: color-mix(in srgb, var(--brass) 8%, transparent); }
   .stat-box .readout { font-family: var(--serif); font-size: 1.2rem; color: var(--brass); }
   .hp-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px; }
   .hp-row .stat-box input { font-size: 1rem; }
@@ -258,7 +259,14 @@
     <div class="card">
       <h2>Combat Stats</h2>
       <div class="stat-strip">
-        <div class="stat-box"><label>AC</label><input type="number" data-path="combat.ac"></div>
+        <div class="stat-box">
+          <label>AC</label>
+          <input type="number" data-path="combat.ac" id="acInput">
+          <div class="ab-base-row" title="Unarmored Defense: 10 + DEX + WIS">
+            <input type="checkbox" id="unarmoredToggle" style="width:auto;">
+            <label for="unarmoredToggle" style="display:inline; margin:0; font-size:0.62rem;">Unarmored</label>
+          </div>
+        </div>
         <div class="stat-box"><label>Initiative</label><div class="readout" id="initReadout">+0</div></div>
         <div class="stat-box"><label>Speed</label><input type="number" data-path="combat.speed"></div>
       </div>
@@ -401,7 +409,7 @@
     skillProf: { acrobatics: false, animalHandling: false, arcana: false, athletics: false, deception: false,
       history: false, insight: false, intimidation: false, investigation: false, medicine: false, nature: false,
       perception: false, performance: false, persuasion: false, religion: false, sleightOfHand: false, stealth: true, survival: false },
-    combat: { ac: '', speed: 40, hitDice: '4d8', hpMax: '', hpCurrent: '', hpTemp: '', deathSuccess: 0, deathFail: 0 },
+    combat: { ac: '', speed: 40, hitDice: '4d8', hpMax: '', hpCurrent: '', hpTemp: '', deathSuccess: 0, deathFail: 0, unarmoredDefense: true },
     resources: { kiCurrent: 4, kiMax: 4, martialArtsDie: '1d4' },
     currency: { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 },
     attacks: [
@@ -603,7 +611,29 @@
     document.getElementById('initReadout').textContent = fmtMod(abilityMod(state.abilities.dex));
     var perceptionDef = SKILLS.filter(function (s) { return s.key === 'perception'; })[0];
     document.getElementById('passivePerception').textContent = 10 + skillTotal(perceptionDef);
+    updateACFromUnarmored();
   }
+
+  // ---------- Unarmored Defense (10 + DEX + WIS when no armor is worn) ----------
+  function updateACFromUnarmored() {
+    var acInput = document.getElementById('acInput');
+    var toggle = document.getElementById('unarmoredToggle');
+    if (!acInput || !toggle) return;
+    toggle.checked = !!state.combat.unarmoredDefense;
+    if (state.combat.unarmoredDefense) {
+      var ac = 10 + abilityMod(state.abilities.dex) + abilityMod(state.abilities.wis);
+      state.combat.ac = ac;
+      acInput.value = ac;
+      acInput.readOnly = true;
+    } else {
+      acInput.readOnly = false;
+    }
+  }
+  document.getElementById('unarmoredToggle').addEventListener('change', function () {
+    state.combat.unarmoredDefense = this.checked;
+    persistLocal();
+    updateACFromUnarmored();
+  });
 
   // ---------- Death saves ----------
   function renderDeathSaves() {
