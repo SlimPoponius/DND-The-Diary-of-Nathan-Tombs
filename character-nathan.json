@@ -112,7 +112,7 @@
     {
       "name": "Cursed Gloves of Troll Strength",
       "bonus": "",
-      "damage": "2d4 bludgeoning + 1d4 cold",
+      "damage": "1d4 + STR + proficiency",
       "notes": "Obtained as a replacement for the shopkeep getting the umbral gloves stolen"
     }
   ],
