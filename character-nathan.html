@@ -226,6 +226,27 @@
   .attack-table .col-x { width: 24px; text-align: center; }
   .remove-row { background: none; border: none; color: var(--text-faint); cursor: pointer; font-size: 0.9rem; }
   .remove-row:hover { color: var(--brick); }
+  .table-scroll { overflow-x: auto; }
+
+  /* ---------- Feature chart ---------- */
+  .feature-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; min-width: 560px; }
+  .feature-table th { text-align: left; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-faint); padding: 4px 6px; border-bottom: 1px solid var(--rule); }
+  .feature-table td { padding: 5px 6px; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+  .feature-table input, .feature-table select, .feature-table textarea { width: 100%; font-size: 0.82rem; }
+  .feature-table textarea { resize: vertical; font-family: inherit; line-height: 1.45; }
+  .feature-table .col-lv { width: 3.2em; }
+  .feature-table .col-lv input { text-align: center; font-family: var(--mono); }
+  .feature-table .col-feat { width: 22%; }
+  .feature-table .col-type { width: 6.5em; }
+  .feature-row.upcoming { opacity: 0.5; }
+  .feature-row.upcoming td { font-style: italic; }
+  .feat-type-badge {
+    display: inline-block; margin-top: 3px; font-family: var(--mono); font-size: 0.6rem;
+    letter-spacing: 0.04em; text-transform: uppercase; padding: 1px 6px; border-radius: 20px;
+  }
+  .feat-type-core { border: 1px solid var(--brass-dim); color: var(--brass); background: color-mix(in srgb, var(--brass) 10%, transparent); }
+  .feat-type-subclass { border: 1px solid var(--verdigris-dim); color: var(--verdigris); background: color-mix(in srgb, var(--verdigris) 12%, transparent); }
+  .feat-type-optional { border: 1px solid var(--rule); color: var(--text-faint); background: var(--surface-raised); }
 
   /* ---------- Class reference panel ---------- */
   .lookup-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
@@ -412,10 +433,12 @@
 
     <div class="card col-span-2">
       <h2>Attacks &amp; Cantrips</h2>
-      <table class="attack-table">
-        <thead><tr><th class="col-name">Name</th><th class="col-bonus">Bonus</th><th class="col-dmg">Damage</th><th>Notes</th><th class="col-x"></th></tr></thead>
-        <tbody id="attackBody"></tbody>
-      </table>
+      <div class="table-scroll">
+        <table class="attack-table">
+          <thead><tr><th class="col-name">Name</th><th class="col-bonus">Bonus</th><th class="col-dmg">Damage</th><th>Notes</th><th class="col-x"></th></tr></thead>
+          <tbody id="attackBody"></tbody>
+        </table>
+      </div>
       <button class="btn small" id="addAttackBtn" style="margin-top:8px;">+ Add row</button>
     </div>
 
@@ -425,8 +448,14 @@
     </div>
 
     <div class="card col-span-2">
-      <h2>Features &amp; Traits</h2>
-      <textarea id="featuresText" rows="8" data-path="features"></textarea>
+      <h2>Features &amp; Traits <span class="hint">Sorted by level. Rows above Nathan's current level are dimmed as upcoming. "Optional" rows only apply if your table uses them.</span></h2>
+      <div class="table-scroll">
+        <table class="feature-table">
+          <thead><tr><th class="col-lv">Lv.</th><th class="col-feat">Feature</th><th class="col-type">Type</th><th>Effect</th><th class="col-x"></th></tr></thead>
+          <tbody id="featureBody"></tbody>
+        </table>
+      </div>
+      <button class="btn small" id="addFeatureBtn" style="margin-top:8px;">+ Add row</button>
     </div>
 
     <div class="card">
@@ -626,7 +655,28 @@
       { name: 'Umbral Gauntlets (Unarmed Strike)', bonus: '', damage: '1d4 + DEX', notes: 'Forged from umbral iron (S6–7); upgraded via a favor for the White Mask Cult (S11)' }
     ],
     equipment: 'Umbral Gauntlets — forged from umbral iron (S6–7), upgraded via a favor for the White Mask Cult (S11)\nCursed gloves — immense strength, at the cost of intelligence (S13)\nShadow gloves — command a shadow clone that mimics him 5 seconds later (S16)\nTemp adventurers’ guild ID (S3); Thieves’ Guild membership (S13)',
-    features: 'Core Monk features through level 4 (Unarmored Defense, Martial Arts, Ki, Flurry of Blows / Patient Defense / Step of the Wind, Unarmored Movement, Monastic Tradition, Deflect Missiles, Ability Score Improvement, Slow Fall) — use the Class Reference panel below for the current SRD text.\n\nWay of Shadow features (Shadow Arts, Shadow Step, etc.) aren’t in the open SRD — track those here manually as they come up.',
+    features: [
+      { level: 1, name: 'Unarmored Defense', type: 'core', effect: 'AC = 10 + DEX mod + WIS mod while wearing no armor and no shield.' },
+      { level: 1, name: 'Martial Arts', type: 'core', effect: 'Use DEX instead of STR for unarmed strikes/monk weapons; roll the Martial Arts die instead of normal damage; bonus-action unarmed strike after the Attack action.' },
+      { level: 2, name: 'Ki', type: 'core', effect: 'Ki points = monk level. Ki save DC = 8 + proficiency + WIS mod. Fuels Flurry of Blows, Patient Defense, Step of the Wind.' },
+      { level: 2, name: 'Flurry of Blows', type: 'core', effect: '1 ki: two unarmed strikes as a bonus action right after the Attack action.' },
+      { level: 2, name: 'Patient Defense', type: 'core', effect: '1 ki: Dodge as a bonus action.' },
+      { level: 2, name: 'Step of the Wind', type: 'core', effect: '1 ki: Disengage or Dash as a bonus action; jump distance doubled that turn.' },
+      { level: 2, name: 'Unarmored Movement', type: 'core', effect: '+10 ft speed while unarmored (already folded into Speed above).' },
+      { level: 2, name: 'Dedicated Weapon', type: 'optional', effect: 'Touch a weapon after a rest to treat it as a monk weapon until swapped.' },
+      { level: 3, name: 'Deflect Missiles', type: 'core', effect: 'Reaction on a ranged hit: reduce damage by 1d10 + DEX mod + monk level; if reduced to 0, catch it and spend 1 ki to fire it back.' },
+      { level: 3, name: 'Ki-Fueled Attack', type: 'optional', effect: 'Spend 1+ ki on your turn for a bonus-action unarmed/monk-weapon attack.' },
+      { level: 3, name: 'Shadow Arts', type: 'subclass', effect: '2 ki: cast Darkness, Darkvision, Pass without Trace, or Silence, no material components. Also grants the Minor Illusion cantrip.' },
+      { level: 4, name: 'Ability Score Improvement', type: 'core', effect: '+2 to one score or +1 to two, capped at 20. (Applied.)' },
+      { level: 4, name: 'Slow Fall', type: 'core', effect: "Reaction when falling: reduce fall damage by 5 x monk level." },
+      { level: 4, name: 'Quickened Healing', type: 'optional', effect: 'Action + 2 ki: roll the Martial Arts die + proficiency bonus in healing.' },
+      { level: 5, name: 'Extra Attack', type: 'core', effect: 'Attack twice, not once, whenever taking the Attack action.' },
+      { level: 5, name: 'Stunning Strike', type: 'core', effect: "1 ki on a melee hit: target makes a CON save or is stunned until the end of Nathan's next turn." },
+      { level: 5, name: 'Focused Aim', type: 'optional', effect: 'After a miss, spend 1-3 ki for +2 to that attack roll per ki spent.' },
+      { level: 6, name: 'Shadow Step', type: 'subclass', effect: "In dim light/darkness, bonus action to teleport 60 ft to a dim/dark space you can see; advantage on the first melee attack you make that turn." },
+      { level: 11, name: 'Cloak of Shadows', type: 'subclass', effect: 'In dim light/darkness, action to turn invisible until you attack, cast a spell, or enter bright light.' },
+      { level: 17, name: 'Opportunist', type: 'subclass', effect: "Reaction: melee attack a creature within 5 ft when it's hit by an attack from someone other than you." }
+    ],
     notes: 'Catchphrase: "These hands."\n\nPer Moss’s dream (S10): saw his mother murdered by a figure resembling his father as a kid.\n\nConfirmed (S10, via the pipe man’s orb): that father is Dr. Tombs. The rest of the party doesn’t know this yet.\n\nTold Bingus (S9): not interested in "the wish" — wants revenge.'
   };
 
@@ -1001,6 +1051,66 @@
     renderAttacks();
   });
 
+  // ---------- Features chart ----------
+  var FEATURE_TYPES = [
+    { value: 'core', label: 'Core' },
+    { value: 'subclass', label: 'Subclass' },
+    { value: 'optional', label: 'Optional' }
+  ];
+  function renderFeatures() {
+    var body = document.getElementById('featureBody');
+    body.innerHTML = '';
+    var sorted = state.features.map(function (f, i) { return { f: f, i: i }; })
+      .sort(function (a, b) { return (Number(a.f.level) || 0) - (Number(b.f.level) || 0); });
+
+    sorted.forEach(function (entry) {
+      var feat = entry.f, idx = entry.i;
+      var tr = document.createElement('tr');
+      tr.className = 'feature-row' + (Number(feat.level) > Number(state.identity.level) ? ' upcoming' : '');
+      var typeOptions = FEATURE_TYPES.map(function (t) {
+        return '<option value="' + t.value + '"' + (feat.type === t.value ? ' selected' : '') + '>' + t.label + '</option>';
+      }).join('');
+      tr.innerHTML =
+        '<td class="col-lv"><input type="number" min="1" max="20" data-i="' + idx + '" data-f="level"></td>' +
+        '<td class="col-feat"><input data-i="' + idx + '" data-f="name"></td>' +
+        '<td class="col-type"><select class="feat-type-' + (feat.type || 'core') + '" data-i="' + idx + '" data-f="type">' + typeOptions + '</select></td>' +
+        '<td><textarea rows="2" data-i="' + idx + '" data-f="effect"></textarea></td>' +
+        '<td class="col-x"><button class="remove-row" data-i="' + idx + '" title="Remove">&times;</button></td>';
+      body.appendChild(tr);
+
+      tr.querySelectorAll('[data-f]').forEach(function (el) {
+        var f = el.getAttribute('data-f');
+        el.value = feat[f] === undefined ? '' : feat[f];
+        el.addEventListener('input', function () {
+          state.features[idx][f] = (f === 'level') ? (el.value === '' ? '' : Number(el.value)) : el.value;
+          persistLocal();
+        });
+        if (f === 'level') {
+          // Re-sort/re-dim only once the field is committed, not on every keystroke
+          // (a full re-render mid-keystroke would steal focus from the input).
+          el.addEventListener('change', function () { renderFeatures(); });
+        }
+        if (el.tagName === 'SELECT') {
+          el.addEventListener('change', function () {
+            state.features[idx].type = el.value;
+            persistLocal();
+            renderFeatures();
+          });
+        }
+      });
+      tr.querySelector('.remove-row').addEventListener('click', function () {
+        state.features.splice(idx, 1);
+        persistLocal();
+        renderFeatures();
+      });
+    });
+  }
+  document.getElementById('addFeatureBtn').addEventListener('click', function () {
+    state.features.push({ level: state.identity.level || 1, name: '', type: 'core', effect: '' });
+    persistLocal();
+    renderFeatures();
+  });
+
   // ---------- Full render ----------
   function fullRender() {
     renderIdentityAndCombat();
@@ -1011,6 +1121,7 @@
     renderDeathSaves();
     renderResources();
     renderAttacks();
+    renderFeatures();
     renderKillcount();
     renderCurrencyTotal();
     document.getElementById('lookupLevel').value = state.identity.level;
