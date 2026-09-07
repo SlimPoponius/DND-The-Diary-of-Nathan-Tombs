@@ -287,7 +287,7 @@
     <p class="lock-title">These Hands</p>
     <p class="lock-sub">Nathan's character sheet is locked. Enter the password to continue.</p>
     <div class="pw-field">
-      <input type="password" id="lockPassword" placeholder="Password" autocomplete="off">
+      <input type="password" id="lockPassword" placeholder="Password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
       <button type="button" class="pw-toggle" id="lockPwToggle">Show</button>
     </div>
     <button class="btn primary" id="lockSubmit" type="button">Unlock</button>
@@ -325,7 +325,7 @@
           It's stored only in this browser's local storage and is never written into the saved file itself.
           <div class="row">
             <div class="pw-field">
-              <input type="password" id="tokenInput" placeholder="github_pat_…" autocomplete="off">
+              <input type="password" id="tokenInput" placeholder="github_pat_…" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
               <button type="button" class="pw-toggle" id="tokenPwToggle">Show</button>
             </div>
             <button class="btn small" id="saveTokenBtn">Save token</button>
@@ -539,7 +539,7 @@
   }
 
   function tryUnlock() {
-    var val = passwordInput.value;
+    var val = passwordInput.value.trim();
     if (!val) return;
     if (sha256Hex(val) === LOCK_HASH) {
       lockErrorEl.textContent = '';
