@@ -214,9 +214,46 @@
   .api-note { margin-top: 10px; font-size: 0.76rem; color: var(--text-faint); line-height: 1.5; }
 
   .kill-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+
+  /* ---------- Lock screen ---------- */
+  #lockScreen {
+    position: fixed; inset: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg); padding: 20px;
+  }
+  .lock-box {
+    max-width: 360px; width: 100%; text-align: center;
+    border: 1px solid var(--rule); border-radius: 4px; background: var(--surface);
+    padding: 28px 24px;
+  }
+  .lock-box .lock-title {
+    font-family: var(--serif); font-size: 1.4rem; font-weight: 600; margin: 0 0 6px;
+  }
+  .lock-box .lock-sub {
+    font-size: 0.85rem; color: var(--text-faint); margin: 0 0 20px; line-height: 1.5;
+  }
+  .lock-box input[type="password"] {
+    width: 100%; text-align: center; font-family: var(--mono); font-size: 1rem; padding: 10px;
+    margin-bottom: 10px;
+  }
+  .lock-box .btn { width: 100%; padding: 10px; font-size: 0.8rem; }
+  .lock-box .lock-error {
+    color: var(--brick); font-family: var(--mono); font-size: 0.74rem; min-height: 1.2em; margin-top: 10px;
+  }
+  .page[hidden] { display: none; }
 </style>
 
-<div class="page">
+<div id="lockScreen" hidden>
+  <div class="lock-box">
+    <p class="lock-title">These Hands</p>
+    <p class="lock-sub">Nathan's character sheet is locked. Enter the password to continue.</p>
+    <input type="password" id="lockPassword" placeholder="Password" autocomplete="off">
+    <button class="btn primary" id="lockSubmit" type="button">Unlock</button>
+    <p class="lock-error" id="lockError"></p>
+  </div>
+</div>
+
+<div class="page" hidden>
 
   <header class="masthead">
     <a class="back-link" href="index.html">&larr; Campaign Ledger</a>
@@ -362,6 +399,70 @@
 
   </div>
 </div>
+
+<script>
+(function(){
+  // ---------- Lock screen ----------
+  // Casual deterrent only, not real security: this is a static page with no
+  // server, so the underlying character-nathan.json is still fetchable directly
+  // by URL (required for the GitHub sync feature), and anyone opening dev tools
+  // could bypass this. It's meant to stop someone from seeing anything just by
+  // clicking a shared link.
+  var LOCK_HASH = 'ed73de9b51e3047d2a3acd04752f2ca5bc2fe1a185aad258fcfb67fec72cd072';
+  var UNLOCK_KEY = 'these-hands-nathan-sheet-unlocked';
+  var lockScreen = document.getElementById('lockScreen');
+  var pageEl = document.querySelector('.page');
+  var passwordInput = document.getElementById('lockPassword');
+  var lockErrorEl = document.getElementById('lockError');
+
+  function sha256Hex(str) {
+    var enc = new TextEncoder().encode(str);
+    return crypto.subtle.digest('SHA-256', enc).then(function (buf) {
+      return Array.prototype.map.call(new Uint8Array(buf), function (b) {
+        return b.toString(16).padStart(2, '0');
+      }).join('');
+    });
+  }
+
+  function unlockSheet() {
+    try { localStorage.setItem(UNLOCK_KEY, '1'); } catch (e) {}
+    lockScreen.hidden = true;
+    pageEl.hidden = false;
+  }
+
+  var alreadyUnlocked = false;
+  try { alreadyUnlocked = localStorage.getItem(UNLOCK_KEY) === '1'; } catch (e) {}
+
+  if (alreadyUnlocked) {
+    pageEl.hidden = false;
+  } else {
+    lockScreen.hidden = false;
+    passwordInput.focus();
+  }
+
+  function tryUnlock() {
+    var val = passwordInput.value;
+    if (!val) return;
+    if (!window.crypto || !window.crypto.subtle) {
+      lockErrorEl.textContent = 'This browser cannot verify the password (Web Crypto unavailable).';
+      return;
+    }
+    sha256Hex(val).then(function (hex) {
+      if (hex === LOCK_HASH) {
+        lockErrorEl.textContent = '';
+        unlockSheet();
+      } else {
+        lockErrorEl.textContent = 'Incorrect password.';
+        passwordInput.value = '';
+        passwordInput.focus();
+      }
+    });
+  }
+
+  document.getElementById('lockSubmit').addEventListener('click', tryUnlock);
+  passwordInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryUnlock(); });
+})();
+</script>
 
 <script>
 (function(){
