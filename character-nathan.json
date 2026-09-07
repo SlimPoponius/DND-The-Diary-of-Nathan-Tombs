@@ -139,5 +139,12 @@
     { "level": 11, "name": "Cloak of Shadows", "type": "subclass", "effect": "In dim light/darkness, action to turn invisible until you attack, cast a spell, or enter bright light." },
     { "level": 17, "name": "Opportunist", "type": "subclass", "effect": "Reaction: melee attack a creature within 5 ft when it's hit by an attack from someone other than you." }
   ],
+  "spells": [
+    { "level": 3, "name": "Minor Illusion", "type": "subclass", "effect": "Cantrip, granted free by Shadow Arts. Cast at will, no ki cost." },
+    { "level": 3, "name": "Darkness", "type": "subclass", "effect": "2 ki (Shadow Arts): cast Darkness, no material components." },
+    { "level": 3, "name": "Darkvision", "type": "subclass", "effect": "2 ki (Shadow Arts): cast Darkvision, no material components." },
+    { "level": 3, "name": "Pass without Trace", "type": "subclass", "effect": "2 ki (Shadow Arts): cast Pass without Trace, no material components." },
+    { "level": 3, "name": "Silence", "type": "subclass", "effect": "2 ki (Shadow Arts): cast Silence, no material components." }
+  ],
   "notes": "Per Moss’s dream (S10): saw his mother murdered by a figure resembling his father as a kid.\n\nConfirmed (S10, via the pipe man’s orb): that father is Dr. Tombs. The rest of the party doesn’t know this yet.\n\nTold Bingus (S9): not interested in \"the wish\" — wants revenge.\n\nMulticlass leaning (next level-up): Sorcerer, Shadow Magic origin — story reasons win out over Warlock here, since an inherited bloodline (Eyes of the Dark, Strength of the Grave) fits a necromancer father better than a warlock's pact framing. Long-rest slots, so it doesn't pair with Ki as cleanly, but that's the tradeoff.\n\nBackup if Sorcerer doesn't pan out: 2 levels of Fighter for Action Surge + Second Wind — barely dents Monk progression, zero stat investment.\n\nClose-range spell picks (not just the Shadow Magic origin features): Shocking Grasp (cantrip, touch, melee spell attack, shuts down the target's reaction) and Poison Spray (cantrip, 10 ft, save-based backup for when Shocking Grasp whiffs) as the starting pair. Thunderwave (1st level, self-centered push) for when he's surrounded. Long-term goal once he's deeper into Sorcerer: Vampiric Touch (3rd level, melee spell attack, necrotic, heals him for half the damage dealt) — the real echo of Dr. Tombs' necromancy."
 }

@@ -458,6 +458,17 @@
       <button class="btn small" id="addFeatureBtn" style="margin-top:8px;">+ Add row</button>
     </div>
 
+    <div class="card col-span-2">
+      <h2>Spells <span class="hint">Same chart as Features &amp; Traits &mdash; Nathan's "magic" so far is ki duplicating spells via Shadow Arts, not a spellcasting class.</span></h2>
+      <div class="table-scroll">
+        <table class="feature-table">
+          <thead><tr><th class="col-lv">Lv.</th><th class="col-feat">Spell</th><th class="col-type">Type</th><th>Effect</th><th class="col-x"></th></tr></thead>
+          <tbody id="spellBody"></tbody>
+        </table>
+      </div>
+      <button class="btn small" id="addSpellBtn" style="margin-top:8px;">+ Add row</button>
+    </div>
+
     <div class="card">
       <h2>Notes &amp; Backstory</h2>
       <textarea id="notesText" rows="8" data-path="notes"></textarea>
@@ -677,7 +688,14 @@
       { level: 11, name: 'Cloak of Shadows', type: 'subclass', effect: 'In dim light/darkness, action to turn invisible until you attack, cast a spell, or enter bright light.' },
       { level: 17, name: 'Opportunist', type: 'subclass', effect: "Reaction: melee attack a creature within 5 ft when it's hit by an attack from someone other than you." }
     ],
-    notes: 'Catchphrase: "These hands."\n\nPer Moss’s dream (S10): saw his mother murdered by a figure resembling his father as a kid.\n\nConfirmed (S10, via the pipe man’s orb): that father is Dr. Tombs. The rest of the party doesn’t know this yet.\n\nTold Bingus (S9): not interested in "the wish" — wants revenge.'
+    notes: 'Per Moss’s dream (S10): saw his mother murdered by a figure resembling his father as a kid.\n\nConfirmed (S10, via the pipe man’s orb): that father is Dr. Tombs. The rest of the party doesn’t know this yet.\n\nTold Bingus (S9): not interested in "the wish" — wants revenge.',
+    spells: [
+      { level: 3, name: 'Minor Illusion', type: 'subclass', effect: 'Cantrip, granted free by Shadow Arts. Cast at will, no ki cost.' },
+      { level: 3, name: 'Darkness', type: 'subclass', effect: '2 ki (Shadow Arts): cast Darkness, no material components.' },
+      { level: 3, name: 'Darkvision', type: 'subclass', effect: '2 ki (Shadow Arts): cast Darkvision, no material components.' },
+      { level: 3, name: 'Pass without Trace', type: 'subclass', effect: '2 ki (Shadow Arts): cast Pass without Trace, no material components.' },
+      { level: 3, name: 'Silence', type: 'subclass', effect: '2 ki (Shadow Arts): cast Silence, no material components.' }
+    ],
   };
 
   var state = loadInitial();
@@ -1057,11 +1075,16 @@
     { value: 'subclass', label: 'Subclass' },
     { value: 'optional', label: 'Optional' }
   ];
-  function renderFeatures() {
-    var body = document.getElementById('featureBody');
+  // Shared renderer for any "level-sorted feature chart" — used by both
+  // Features & Traits and Spells, which are structurally identical.
+  function renderFeatureLikeTable(stateKey, bodyId) {
+    var body = document.getElementById(bodyId);
     body.innerHTML = '';
-    var sorted = state.features.map(function (f, i) { return { f: f, i: i }; })
+    var list = state[stateKey];
+    var sorted = list.map(function (f, i) { return { f: f, i: i }; })
       .sort(function (a, b) { return (Number(a.f.level) || 0) - (Number(b.f.level) || 0); });
+
+    function rerender() { renderFeatureLikeTable(stateKey, bodyId); }
 
     sorted.forEach(function (entry) {
       var feat = entry.f, idx = entry.i;
@@ -1082,33 +1105,41 @@
         var f = el.getAttribute('data-f');
         el.value = feat[f] === undefined ? '' : feat[f];
         el.addEventListener('input', function () {
-          state.features[idx][f] = (f === 'level') ? (el.value === '' ? '' : Number(el.value)) : el.value;
+          list[idx][f] = (f === 'level') ? (el.value === '' ? '' : Number(el.value)) : el.value;
           persistLocal();
         });
         if (f === 'level') {
           // Re-sort/re-dim only once the field is committed, not on every keystroke
           // (a full re-render mid-keystroke would steal focus from the input).
-          el.addEventListener('change', function () { renderFeatures(); });
+          el.addEventListener('change', rerender);
         }
         if (el.tagName === 'SELECT') {
           el.addEventListener('change', function () {
-            state.features[idx].type = el.value;
+            list[idx].type = el.value;
             persistLocal();
-            renderFeatures();
+            rerender();
           });
         }
       });
       tr.querySelector('.remove-row').addEventListener('click', function () {
-        state.features.splice(idx, 1);
+        list.splice(idx, 1);
         persistLocal();
-        renderFeatures();
+        rerender();
       });
     });
   }
+  function renderFeatures() { renderFeatureLikeTable('features', 'featureBody'); }
+  function renderSpells() { renderFeatureLikeTable('spells', 'spellBody'); }
+
   document.getElementById('addFeatureBtn').addEventListener('click', function () {
     state.features.push({ level: state.identity.level || 1, name: '', type: 'core', effect: '' });
     persistLocal();
     renderFeatures();
+  });
+  document.getElementById('addSpellBtn').addEventListener('click', function () {
+    state.spells.push({ level: state.identity.level || 1, name: '', type: 'subclass', effect: '' });
+    persistLocal();
+    renderSpells();
   });
 
   // ---------- Full render ----------
@@ -1122,6 +1153,7 @@
     renderResources();
     renderAttacks();
     renderFeatures();
+    renderSpells();
     renderKillcount();
     renderCurrencyTotal();
     document.getElementById('lookupLevel').value = state.identity.level;
