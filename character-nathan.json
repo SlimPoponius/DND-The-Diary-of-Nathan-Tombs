@@ -106,7 +106,7 @@
     {
       "name": "Umbral Gauntlets (Unarmed Strike)",
       "bonus": "",
-      "damage": "1d4 + DEX + proficiency",
+      "damage": "2d4 + DEX + proficiency",
       "notes": "Forged from umbral iron (S6-7); upgraded via a favor for the White Mask Cult (S11)"
     },
     {
